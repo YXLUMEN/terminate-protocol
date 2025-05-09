@@ -1,0 +1,128 @@
+{
+  "bullet_ricochet": {
+    "subtitle": "sound.terminate-protocol.bullet_ricochet",
+    "sounds": [
+      "terminate-protocol:bullet_ricochet"
+    ]
+  },
+  "gas": {
+    "subtitle": "sound.terminate-protocol.gas",
+    "sounds": [
+      "terminate-protocol:gas"
+    ]
+  },
+  "pull_bin": {
+    "subtitle": "sound.terminate-protocol.pull_bin",
+    "sounds": [
+      "terminate-protocol:pull_bin"
+    ]
+  },
+  "throw_grenade": {
+    "subtitle": "sound.terminate-protocol.throw_grenade",
+    "sounds": [
+      "terminate-protocol:throw_grenade"
+    ]
+  },
+  "grenade_bounce": {
+    "subtitle": "sound.terminate-protocol.grenade_bounce",
+    "sounds": [
+      "terminate-protocol:grenade_bounce"
+    ]
+  },
+  "phoenix_kit_charge": {
+    "subtitle": "sound.terminate-protocol.phoenix_kit_charge",
+    "sounds": [
+      "terminate-protocol:phoenix_kit_charge"
+    ]
+  },
+  "battery_charge": {
+    "subtitle": "sound.terminate-protocol.battery_charge",
+    "sounds": [
+      "terminate-protocol:battery_charge"
+    ]
+  },
+  "cell_charge": {
+    "subtitle": "sound.terminate-protocol.cell_charge",
+    "sounds": [
+      "terminate-protocol:cell_charge"
+    ]
+  },
+  "battery_charge_start": {
+    "subtitle": "sound.terminate-protocol.battery_charge_start",
+    "sounds": [
+      "terminate-protocol:battery_charge_start"
+    ]
+  },
+  "battery_charge_fail": {
+    "subtitle": "sound.terminate-protocol.battery_charge_fail",
+    "sounds": [
+      "terminate-protocol:battery_charge_fail"
+    ]
+  },
+  "battery_charge_finish_en": {
+    "subtitle": "sound.terminate-protocol.battery_charge_finish_en",
+    "sounds": [
+      "terminate-protocol:battery_charge_finish_en"
+    ]
+  },
+  "battery_charge_finish_mec": {
+    "subtitle": "sound.terminate-protocol.battery_charge_finish_mec",
+    "sounds": [
+      "terminate-protocol:battery_charge_finish_mec"
+    ]
+  },
+  "kit_start": {
+    "subtitle": "sound.terminate-protocol.kit_start",
+    "sounds": [
+      "terminate-protocol:kit_start"
+    ]
+  },
+  "kit_using": {
+    "subtitle": "sound.terminate-protocol.kit_using",
+    "sounds": [
+      "terminate-protocol:kit_using"
+    ]
+  },
+  "kit_fail": {
+    "subtitle": "sound.terminate-protocol.kit_fail",
+    "sounds": [
+      "terminate-protocol:kit_fail"
+    ]
+  },
+  "kit_finish": {
+    "subtitle": "sound.terminate-protocol.kit_finish",
+    "sounds": [
+      "terminate-protocol:kit_finish"
+    ]
+  },
+  "shield_crash_1": {
+    "subtitle": "sound.terminate-protocol.shield_crash_1",
+    "sounds": [
+      "terminate-protocol:shield_crash_1"
+    ]
+  },
+  "shield_crash_2": {
+    "subtitle": "sound.terminate-protocol.shield_crash_2",
+    "sounds": [
+      "terminate-protocol:shield_crash_2"
+    ]
+  },
+  "shield_crash_3": {
+    "subtitle": "sound.terminate-protocol.shield_crash_3",
+    "sounds": [
+      "terminate-protocol:shield_crash_3"
+    ]
+  },
+  "shield_crash_4": {
+    "subtitle": "sound.terminate-protocol.shield_crash_4",
+    "sounds": [
+      "terminate-protocol:shield_crash_4"
+    ]
+  },
+  "tinnitus": {
+    "subtitle": "sound.terminate-protocol.tinnitus",
+    "sounds": [
+      "terminate-protocol:tinnitus"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "lumen.terminate_protocol.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LivingEntityMixin",
+    "MobEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

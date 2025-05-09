@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "lumen.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "EntityRenderersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
