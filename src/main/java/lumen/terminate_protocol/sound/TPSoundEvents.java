@@ -33,6 +33,11 @@ public class TPSoundEvents {
 
     public static final SoundEvent TINNITUS = registerSound("tinnitus");
 
+    public static final SoundEvent LIGHT_BULLET_HIT_1 = registerSound("light_bullet_hit_1");
+    public static final SoundEvent LIGHT_BULLET_HIT_2 = registerSound("light_bullet_hit_2");
+    public static final SoundEvent LIGHT_BULLET_HIT_3 = registerSound("light_bullet_hit_3");
+    public static final SoundEvent LIGHT_BULLET_HIT_4 = registerSound("light_bullet_hit_4");
+
     private static SoundEvent registerSound(String id) {
         Identifier identifier = Identifier.of(TerminateProtocol.MOD_ID, id);
         return Registry.register(Registries.SOUND_EVENT, identifier, SoundEvent.of(identifier));

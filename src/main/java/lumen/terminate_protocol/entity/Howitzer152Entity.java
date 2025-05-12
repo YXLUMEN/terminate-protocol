@@ -16,6 +16,8 @@ import static lumen.terminate_protocol.util.RayCasterTools.getRandomDirection;
 public class Howitzer152Entity extends AbstractGrenadeEntity {
     private static final float POWER = 64;
     private static final short FRAG_COUNT = 256;
+    private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster()
+            .maxHit((short) 2).baseDamage(160.0f).penetrateChance(3.0f);
 
     public Howitzer152Entity(EntityType<? extends AbstractGrenadeEntity> entityType, World world) {
         super(entityType, world);
@@ -33,21 +35,18 @@ public class Howitzer152Entity extends AbstractGrenadeEntity {
     protected void explode() {
         World world = this.getWorld();
 
-        world.createExplosion(this,
-                this.getX(), this.getY(), this.getZ(),
-                POWER,
-                true,
-                World.ExplosionSourceType.NONE
-        );
+        if (!world.isClient) {
+            world.createExplosion(this,
+                    this.getX(), this.getY(), this.getZ(),
+                    POWER,
+                    true,
+                    World.ExplosionSourceType.NONE
+            );
 
-        if (world instanceof ServerWorld serverWorld) {
             Vec3d startPos = this.getPos().add(0, 0.2, 0);
-            TrajectoryRayCaster rayCaster = new TrajectoryRayCaster()
-                    .penetrateChance(3.0f);
-
             for (int i = 0; i < FRAG_COUNT; i++) {
                 Vec3d randomDir = getRandomDirection(this.random);
-                rayCaster.rayCast(serverWorld, this, startPos, randomDir, 160.0f);
+                RAY_CASTER.rayCast((ServerWorld) world, this, startPos, randomDir);
             }
         }
 

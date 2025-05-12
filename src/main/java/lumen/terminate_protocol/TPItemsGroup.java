@@ -20,6 +20,7 @@ public class TPItemsGroup {
                         .entries((displayContext, entries) -> {
                             entries.add(VK47);
                             entries.add(MINI_GUN);
+                            entries.add(KERABLE);
 
                             entries.add(FRAG_GRENADE);
                             entries.add(SMOKE_GRENADE);

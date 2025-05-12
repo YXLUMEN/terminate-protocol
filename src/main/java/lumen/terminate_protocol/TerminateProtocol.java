@@ -21,6 +21,7 @@ public class TerminateProtocol implements ModInitializer {
         TPNetwork.registerNetwork();
 
         TPItemsGroup.registerItemsGroup();
+        TPComponentTypes.registerComponent();
 
         TPItems.registerItems();
         TPEntities.registerEntities();

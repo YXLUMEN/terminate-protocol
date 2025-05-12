@@ -124,5 +124,29 @@
     "sounds": [
       "terminate-protocol:tinnitus"
     ]
+  },
+  "light_bullet_hit_1": {
+    "subtitle": "sound.terminate-protocol.light_bullet_hit_1",
+    "sounds": [
+      "terminate-protocol:light_bullet_hit_1"
+    ]
+  },
+  "light_bullet_hit_2": {
+    "subtitle": "sound.terminate-protocol.light_bullet_hit_2",
+    "sounds": [
+      "terminate-protocol:light_bullet_hit_2"
+    ]
+  },
+  "light_bullet_hit_3": {
+    "subtitle": "sound.terminate-protocol.light_bullet_hit_3",
+    "sounds": [
+      "terminate-protocol:light_bullet_hit_3"
+    ]
+  },
+  "light_bullet_hit_4": {
+    "subtitle": "sound.terminate-protocol.light_bullet_hit_4",
+    "sounds": [
+      "terminate-protocol:light_bullet_hit_4"
+    ]
   }
 }

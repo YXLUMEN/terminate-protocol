@@ -19,10 +19,10 @@
 			"lumen.terminate_protocol.TerminateProtocol"
 		],
 		"client": [
-			"lumen.TerminateProtocolClient"
+          "lumen.terminate_protocol.TerminateProtocolClient"
 		],
 		"fabric-datagen": [
-			"lumen.TerminateProtocolDataGenerator"
+          "lumen.terminate_protocol.TerminateProtocolDataGenerator"
 		]
 	},
 	"mixins": [

@@ -1,9 +1,11 @@
 {
   "required": true,
-  "package": "lumen.mixin.client",
+  "package": "lumen.terminate_protocol.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "EntityRenderersMixin"
+    "EntityRenderersMixin",
+    "GameOptionsMixin",
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

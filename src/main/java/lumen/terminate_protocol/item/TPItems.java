@@ -1,6 +1,10 @@
 package lumen.terminate_protocol.item;
 
 import lumen.terminate_protocol.TerminateProtocol;
+import lumen.terminate_protocol.item.grenade.*;
+import lumen.terminate_protocol.item.guns.KerableItem;
+import lumen.terminate_protocol.item.guns.MiniGunItem;
+import lumen.terminate_protocol.item.guns.VK47Item;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -26,8 +30,9 @@ public class TPItems {
 
     public static final Item HOWITZER_152 = register("howitzer152", new Howitzer152Item(new Item.Settings().maxCount(32)));
 
-    public static final Item VK47 = register("vk47", new VK47Item(new Item.Settings().maxCount(1)));
-    public static final Item MINI_GUN = register("mini_gun", new MiniGunItem(new Item.Settings().maxCount(1)));
+    public static final Item VK47 = register("vk47", new VK47Item(new Item.Settings()));
+    public static final Item MINI_GUN = register("mini_gun", new MiniGunItem(new Item.Settings()));
+    public static final Item KERABLE = register("kerable", new KerableItem(new Item.Settings()));
 
     public static <T extends Item> T register(String id, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(TerminateProtocol.MOD_ID, id), item);

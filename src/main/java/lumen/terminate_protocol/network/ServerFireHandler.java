@@ -1,22 +1,26 @@
 package lumen.terminate_protocol.network;
 
-import lumen.terminate_protocol.item.AbstractGunItem;
+import lumen.terminate_protocol.item.guns.AbstractGunItem;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ServerFireHandler {
+    private static final int MAX_TOLERANT_TICK = 10;
+
     public static void register() {
         ServerPlayNetworking.registerGlobalReceiver(GunFireC2SPayload.ID, (payload, context) -> {
-            long fireTime = payload.fireTime();
+            long clientTime = payload.clientTime();
 
             context.player().server.execute(() -> {
-                PlayerEntity player = context.player();
-                Item item = player.getMainHandStack().getItem();
+                ServerPlayerEntity player = context.player();
+                ItemStack item = player.getMainHandStack();
 
-                if (!(item instanceof AbstractGunItem firearmsItem)) return;
-                long currentTime = System.currentTimeMillis();
-                if (fireTime <= 0 || fireTime > currentTime || currentTime - fireTime > firearmsItem.getFireRant() * 50L) {
+                if (!(item.getItem() instanceof AbstractGunItem firearmsItem)) return;
+
+                long currentTick = player.getWorld().getTime();
+                if (clientTime <= 0 || clientTime > currentTick || currentTick - clientTime > MAX_TOLERANT_TICK) {
                     return;
                 }
 
@@ -25,7 +29,7 @@ public class ServerFireHandler {
         });
 
         ServerPlayNetworking.registerGlobalReceiver(GunReloadC2SPayload.ID, (payload, context) -> context.player().server.execute(() -> {
-            PlayerEntity player = context.player();
+            ServerPlayerEntity player = context.player();
             Item item = player.getMainHandStack().getItem();
 
             if (item instanceof AbstractGunItem firearmsItem) {

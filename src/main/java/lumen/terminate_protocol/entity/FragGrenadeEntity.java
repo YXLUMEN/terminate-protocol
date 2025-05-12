@@ -14,6 +14,7 @@ import static lumen.terminate_protocol.util.RayCasterTools.getRandomDirection;
 public class FragGrenadeEntity extends AbstractGrenadeEntity {
     private static final float POWER = 3.0f;
     private static final short FRAG_COUNT = 32;
+    private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster().maxHit((short) 3).baseDamage(6.0f);
 
     public FragGrenadeEntity(EntityType<? extends AbstractGrenadeEntity> entityType, World world) {
         super(entityType, world);
@@ -31,20 +32,18 @@ public class FragGrenadeEntity extends AbstractGrenadeEntity {
     protected void explode() {
         World world = this.getWorld();
 
-        world.createExplosion(this,
-                this.getX(), this.getY(), this.getZ(),
-                POWER,
-                false,
-                World.ExplosionSourceType.NONE
-        );
+        if (!world.isClient) {
+            world.createExplosion(this,
+                    this.getX(), this.getY(), this.getZ(),
+                    POWER,
+                    false,
+                    World.ExplosionSourceType.NONE
+            );
 
-        if (world instanceof ServerWorld serverWorld) {
             Vec3d startPos = this.getPos().add(0, 0.5, 0);
-            TrajectoryRayCaster rayCaster = new TrajectoryRayCaster();
-
             for (int i = 0; i < FRAG_COUNT; i++) {
                 Vec3d randomDir = getRandomDirection(this.random);
-                rayCaster.rayCast(serverWorld, this, startPos, randomDir, 8.0f);
+                RAY_CASTER.rayCast((ServerWorld) world, this, startPos, randomDir);
             }
         }
 
