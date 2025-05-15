@@ -92,12 +92,11 @@ public class KraberItem extends AbstractWeaponItem implements IWeaponSound {
     public SoundEvent getSounds(WeaponSoundStage part, Random random) {
         if (part == null) return null;
         return switch (part) {
-            case FIRE -> TPSoundEvents.KRABER_FIRE;
+            case FIRE, FIRE_LOW_AMMO -> TPSoundEvents.KRABER_FIRE;
             case BOLTBACK -> getBoltbackSound(random);
             case BOLTFORWARD -> getBoltForwardSound(random);
             case MAGIN -> TPSoundEvents.KRABER_MAGIN;
             case MAGOUT -> TPSoundEvents.KRABER_MAGOUT;
-            default -> null;
         };
     }
 
