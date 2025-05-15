@@ -13,12 +13,6 @@ public class TPComponentTypes {
             ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
     );
 
-    public static final ComponentType<Short> GUN_AMMO_TYPE = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(TerminateProtocol.MOD_ID, "gun_ammo_type"),
-            ComponentType.<Short>builder().codec(Codec.SHORT).build()
-    );
-
     public static void registerComponent() {
     }
 }

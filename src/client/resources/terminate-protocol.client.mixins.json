@@ -5,7 +5,9 @@
   "client": [
     "EntityRenderersMixin",
     "GameOptionsMixin",
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "HeldItemRendererMixin",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

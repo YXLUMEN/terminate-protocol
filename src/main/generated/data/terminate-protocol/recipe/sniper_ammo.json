@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "minecraft:gold_ingot"
+    },
+    "G": {
+      "item": "minecraft:gunpowder"
+    },
+    "I": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "IGI",
+    "GEG",
+    "IGI"
+  ],
+  "result": {
+    "count": 4,
+    "id": "terminate-protocol:sniper_ammo"
+  }
+}

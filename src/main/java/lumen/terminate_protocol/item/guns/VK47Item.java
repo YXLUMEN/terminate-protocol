@@ -1,10 +1,11 @@
 package lumen.terminate_protocol.item.guns;
 
+import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.util.TrajectoryRayCaster;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.random.Random;
 
-public class VK47Item extends AbstractGunItem {
+public class VK47Item extends AbstractWeaponItem {
     private static final TrajectoryRayCaster VK47_RAY_CASTER = new TrajectoryRayCaster()
             .baseDamage(4.0f)
             .baseRayLength(64)
@@ -22,7 +23,7 @@ public class VK47Item extends AbstractGunItem {
 
     @Override
     public int getFireRant() {
-        return 3;
+        return 150;
     }
 
     @Override
@@ -48,5 +49,15 @@ public class VK47Item extends AbstractGunItem {
     @Override
     public float getRecoilDecayFactor() {
         return 0.5f;
+    }
+
+    @Override
+    public Item getAmmo() {
+        return TPItems.HEAVY_AMMO;
+    }
+
+    @Override
+    public short getRecoilType() {
+        return 0;
     }
 }

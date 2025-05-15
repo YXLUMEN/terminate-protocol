@@ -20,7 +20,8 @@ public class TPItemsGroup {
                         .entries((displayContext, entries) -> {
                             entries.add(VK47);
                             entries.add(MINI_GUN);
-                            entries.add(KERABLE);
+                            entries.add(R99);
+                            entries.add(KRABER);
 
                             entries.add(FRAG_GRENADE);
                             entries.add(SMOKE_GRENADE);
@@ -30,6 +31,12 @@ public class TPItemsGroup {
                             entries.add(CELL);
                             entries.add(MED_KIT);
                             entries.add(PHOENIX_KIT);
+
+                            entries.add(LIGHT_AMMO);
+                            entries.add(HEAVY_AMMO);
+                            entries.add(ENERGY_AMMO);
+                            entries.add(SHRAPNEL_AMMO);
+                            entries.add(SNIPER_AMMO);
                         })
                         .build()
         );

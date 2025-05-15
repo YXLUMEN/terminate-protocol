@@ -1,16 +1,22 @@
-// 1.21.1	2025-05-08T21:51:51.1929543	terminate-protocol/Recipes
+// 1.21.1	2025-05-15T19:48:47.0175262	terminate-protocol/Recipes
 2a19f5ea903855b9a0bd0d0907061327fb082b36 data\terminate-protocol\recipe\flash_grenade.json
 e7f231f90b61bbbd6c6f25370a23ff061e703834 data\terminate-protocol\advancement\recipes\combat\med_kit.json
+93ff0a291eeb2855fa03233287bbd17e1a0a8a9e data\terminate-protocol\advancement\recipes\combat\light_ammo.json
+a1b93d3bd6514a1e3f1b5d3cdbc0a42ac5e47983 data\terminate-protocol\recipe\light_ammo.json
 3cfa94143e6fd34d812447134931479edf69288d data\terminate-protocol\advancement\recipes\combat\flash_grenade.json
 aa082ae270083b05a94130fe42a75918d0afe2ec data\terminate-protocol\advancement\recipes\combat\incendiary_grenade.json
+f996a6f3483b6e9f8b3b392ba29f3468a2296a6a data\terminate-protocol\recipe\sniper_ammo.json
 58367f8b1b8000c1a9e7d3a918360459f53c9d1f data\terminate-protocol\recipe\incendiary_grenade.json
 e977d208b5cbc4966697aa5805fc031957d25273 data\terminate-protocol\advancement\recipes\combat\battery.json
 523ec41cb0837d0048ae1550563b9c37922e7216 data\terminate-protocol\recipe\battery.json
 dd7ebf971a7264bae6e4dfb2734b76a7ecece50d data\terminate-protocol\recipe\frag_grenade.json
 45c7dcd3d1e559fb360bba51fc57788a5eb4c5d2 data\terminate-protocol\advancement\recipes\combat\smoke_grenade.json
+ab49fc01a91ce2f558adbc6b33f07a3197c21386 data\terminate-protocol\recipe\heavy_ammo.json
 b4a6835970ec1ebcf2449f2b241effabb91fe597 data\terminate-protocol\recipe\med_kit.json
 3b746c5d6dce13a3482f0855fb2222dc36baf937 data\terminate-protocol\recipe\cell.json
+53e86e9bc395e97bde4558e5cd54016ddca6d6fe data\terminate-protocol\advancement\recipes\combat\sniper_ammo.json
 6611445e9116b56c4e77881d4394ccc9811020bc data\terminate-protocol\recipe\phoenix_kit.json
+f1ccf9d5913cd53ef9f7853acd1df52db7474b92 data\terminate-protocol\advancement\recipes\combat\heavy_ammo.json
 27597dc605a53b56df048a81063666866307f0ed data\terminate-protocol\recipe\smoke_grenade.json
 53215e99cc4a951d41f36c0af3d71543b881800e data\terminate-protocol\advancement\recipes\combat\phoenix_kit.json
 c6f0455732c2e74e084ceb9d0b7fa9e516fb8408 data\terminate-protocol\advancement\recipes\combat\frag_grenade.json

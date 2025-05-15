@@ -1,11 +1,15 @@
 package lumen.terminate_protocol.render;
 
+import lumen.terminate_protocol.TerminateProtocol;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class FlashEffectRenderer {
+    public static final Identifier FLASH_LAYER = Identifier.of(TerminateProtocol.MOD_ID, "hud-flash-effect");
+
     private static final Object LOCK = new Object();
     private static final int BASE_DURATION = 6000;
     private static final float MAX_STRENGTH = 2.0f;

@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -21,10 +22,14 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
+import static lumen.terminate_protocol.util.PreciseHitDetection.DAMAGE_MULTIPLIERS;
+import static lumen.terminate_protocol.util.RayCasterTools.syncTrack;
+
 
 public class TrajectoryRayCaster {
     private static final float ENTITY_DETECT_RADIUS = 0.3f;
     private final RegistryKey<DamageType> damageType = TPDamageTypes.FRAGMENT_HIT;
+    private boolean showTrack = false;
 
     private float damage = 0.0f;
     private short maxHit = 1;
@@ -38,8 +43,14 @@ public class TrajectoryRayCaster {
     private float penetrateChance = 1.0f;
     private float bouncePositionOffset = 0.1f;
     private float penetrationPositionOffset = 0.3f;
+    private float healthBaseDamage = 0.0f;
 
     public TrajectoryRayCaster() {
+    }
+
+    public TrajectoryRayCaster showTrack(boolean showTrack) {
+        this.showTrack = showTrack;
+        return this;
     }
 
     public TrajectoryRayCaster baseRayLength(int baseRayLength) {
@@ -102,6 +113,11 @@ public class TrajectoryRayCaster {
         return this;
     }
 
+    public TrajectoryRayCaster healthBaseDamage(float percentage) {
+        this.healthBaseDamage = percentage;
+        return this;
+    }
+
     public void rayCast(ServerWorld world, Entity attacker, Vec3d start, Vec3d dir) {
         Random random = world.random;
 
@@ -129,12 +145,19 @@ public class TrajectoryRayCaster {
             ));
 
             if (blockHit.getType() != HitResult.Type.BLOCK) {
-                if (entityHit != null) handleDamage(world, attacker, entityHit.getEntity(), remainingDamage);
+                if (entityHit == null) {
+                    if (showTrack) syncTrack(attacker, currentPos, endPos);
+                    return;
+                }
+
+                handleDamage(world, attacker, entityHit, remainingDamage);
+                if (showTrack) syncTrack(attacker, currentPos, entityHit.getPos());
                 return;
             }
 
             if (entityHit != null && currentPos.squaredDistanceTo(blockHit.getPos()) > currentPos.squaredDistanceTo(entityHit.getPos())) {
-                handleDamage(world, attacker, entityHit.getEntity(), remainingDamage);
+                handleDamage(world, attacker, entityHit, remainingDamage);
+                if (showTrack) syncTrack(attacker, currentPos, entityHit.getPos());
                 return;
             }
 
@@ -145,6 +168,7 @@ public class TrajectoryRayCaster {
             Direction face = blockHit.getSide();
             final Vec3d normal = new Vec3d(face.getOffsetX(), face.getOffsetY(), face.getOffsetZ()).normalize();
 
+            if (showTrack) syncTrack(attacker, currentPos, endPos);
             if (shouldBounce(currentDir, normal, hardness, remainingDamage, random)) {
                 currentDir = calculateReflection(currentDir, normal, random).normalize();
                 currentPos = blockHit.getPos().add(currentDir.multiply(bouncePositionOffset));
@@ -157,7 +181,7 @@ public class TrajectoryRayCaster {
                 // 穿透
                 currentPos = blockHit.getPos().add(currentDir.multiply(penetrationPositionOffset));
                 remainingDamage *= Math.max(0.3f, 1 - (hardness * 0.2f));
-                if (entityHit != null) handleDamage(world, attacker, entityHit.getEntity(), remainingDamage);
+                if (entityHit != null) handleDamage(world, attacker, entityHit, remainingDamage);
 
                 world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState),
                         currentPos.x, currentPos.y, currentPos.z, 4, 0, 0, 0, 0.01);
@@ -196,12 +220,24 @@ public class TrajectoryRayCaster {
                 .rotateY(angle * (random.nextBoolean() ? 1 : -1));
     }
 
-    private void handleDamage(World world, Entity attacker, Entity target, float damage) {
+    private void handleDamage(World world, Entity attacker, EntityHitResult hitResult, float damage) {
+        Entity target = hitResult.getEntity();
         if (target instanceof LivingEntity living) {
             living.hurtTime = 0;
             living.timeUntilRegen = 0;
         }
+        if (target instanceof PlayerEntity player) {
+            HitBoxType hitBox = PreciseHitDetection.getHitBox(player, hitResult.getPos());
+
+            float partDamageFactor = DAMAGE_MULTIPLIERS.getOrDefault(hitBox, 1.0f);
+            float percentageDamage = player.getHealth() * healthBaseDamage;
+            float finalDamage = damage * partDamageFactor + percentageDamage;
+
+            player.damage(world.getDamageSources().create(this.damageType, attacker), finalDamage);
+            return;
+        }
 
         target.damage(world.getDamageSources().create(this.damageType, attacker), damage);
     }
+
 }

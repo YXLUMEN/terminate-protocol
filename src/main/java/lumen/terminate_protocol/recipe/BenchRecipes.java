@@ -98,5 +98,34 @@ public class BenchRecipes extends FabricRecipeProvider {
                 .input('L', Items.LAPIS_LAZULI)
                 .criterion(FabricRecipeProvider.hasItem(TPItems.PHOENIX_KIT), FabricRecipeProvider.conditionsFromItem(TPItems.PHOENIX_KIT))
                 .offerTo(recipeExporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TPItems.LIGHT_AMMO, 16)
+                .pattern("EGE")
+                .pattern("GEG")
+                .pattern("EGE")
+                .input('E', Items.IRON_NUGGET)
+                .input('G', Items.GUNPOWDER)
+                .criterion(FabricRecipeProvider.hasItem(TPItems.LIGHT_AMMO), FabricRecipeProvider.conditionsFromItem(TPItems.LIGHT_AMMO))
+                .offerTo(recipeExporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TPItems.HEAVY_AMMO, 12)
+                .pattern("EGE")
+                .pattern("GIG")
+                .pattern("EGE")
+                .input('I', Items.IRON_INGOT)
+                .input('E', Items.IRON_NUGGET)
+                .input('G', Items.GUNPOWDER)
+                .criterion(FabricRecipeProvider.hasItem(TPItems.HEAVY_AMMO), FabricRecipeProvider.conditionsFromItem(TPItems.HEAVY_AMMO))
+                .offerTo(recipeExporter);
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TPItems.SNIPER_AMMO, 4)
+                .pattern("IGI")
+                .pattern("GEG")
+                .pattern("IGI")
+                .input('E', Items.GOLD_INGOT)
+                .input('G', Items.GUNPOWDER)
+                .input('I', Items.IRON_NUGGET)
+                .criterion(FabricRecipeProvider.hasItem(TPItems.SNIPER_AMMO), FabricRecipeProvider.conditionsFromItem(TPItems.SNIPER_AMMO))
+                .offerTo(recipeExporter);
     }
 }

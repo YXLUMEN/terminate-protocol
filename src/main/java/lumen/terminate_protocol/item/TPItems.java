@@ -2,8 +2,9 @@ package lumen.terminate_protocol.item;
 
 import lumen.terminate_protocol.TerminateProtocol;
 import lumen.terminate_protocol.item.grenade.*;
-import lumen.terminate_protocol.item.guns.KerableItem;
+import lumen.terminate_protocol.item.guns.KraberItem;
 import lumen.terminate_protocol.item.guns.MiniGunItem;
+import lumen.terminate_protocol.item.guns.R99Item;
 import lumen.terminate_protocol.item.guns.VK47Item;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -32,7 +33,14 @@ public class TPItems {
 
     public static final Item VK47 = register("vk47", new VK47Item(new Item.Settings()));
     public static final Item MINI_GUN = register("mini_gun", new MiniGunItem(new Item.Settings()));
-    public static final Item KERABLE = register("kerable", new KerableItem(new Item.Settings()));
+    public static final Item KRABER = register("kraber", new KraberItem(new Item.Settings()));
+    public static final Item R99 = register("r99", new R99Item(new Item.Settings()));
+
+    public static final Item LIGHT_AMMO = register("light_ammo", new AmmoItem(new Item.Settings().maxCount(72)));
+    public static final Item HEAVY_AMMO = register("heavy_ammo", new AmmoItem(new Item.Settings().maxCount(60)));
+    public static final Item ENERGY_AMMO = register("energy_ammo", new AmmoItem(new Item.Settings().maxCount(48)));
+    public static final Item SHRAPNEL_AMMO = register("shrapnel_ammo", new AmmoItem(new Item.Settings().maxCount(12)));
+    public static final Item SNIPER_AMMO = register("sniper_ammo", new AmmoItem(new Item.Settings().maxCount(8)));
 
     public static <T extends Item> T register(String id, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(TerminateProtocol.MOD_ID, id), item);

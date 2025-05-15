@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "minecraft:iron_nugget"
+    },
+    "G": {
+      "item": "minecraft:gunpowder"
+    }
+  },
+  "pattern": [
+    "EGE",
+    "GEG",
+    "EGE"
+  ],
+  "result": {
+    "count": 16,
+    "id": "terminate-protocol:light_ammo"
+  }
+}

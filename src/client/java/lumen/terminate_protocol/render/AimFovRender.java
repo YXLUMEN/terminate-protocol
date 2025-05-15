@@ -15,7 +15,7 @@ public class AimFovRender {
 
     public static void updateFov(DrawContext drawContext) {
         if (targetFovMultiplier <= 0.3f) {
-            renderSpyglassOverlay(drawContext);
+//            renderSpyglassOverlay(drawContext);
         }
 
         if (currentFovMultiplier == targetFovMultiplier) return;

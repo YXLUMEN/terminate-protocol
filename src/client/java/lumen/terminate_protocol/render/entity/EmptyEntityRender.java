@@ -1,4 +1,4 @@
-package lumen.terminate_protocol.entity_render;
+package lumen.terminate_protocol.render.entity;
 
 import lumen.terminate_protocol.TerminateProtocol;
 import net.minecraft.client.render.VertexConsumerProvider;
