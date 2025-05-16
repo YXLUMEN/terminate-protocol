@@ -1,6 +1,6 @@
 package lumen.terminate_protocol.weapon_handler;
 
-import lumen.terminate_protocol.item.guns.AbstractWeaponItem;
+import lumen.terminate_protocol.item.weapon.WeaponItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -36,9 +36,9 @@ public class WeaponRecoilSystem {
         player.setPitch(player.getPitch() - currentVerticalRecoil);
         player.setYaw(player.getYaw() + currentHorizontalRecoil);
 
-        if (player.getMainHandStack().getItem() instanceof AbstractWeaponItem item) {
-            currentVerticalRecoil *= item.getRecoilDecayFactor();
-            currentHorizontalRecoil *= item.getRecoilDecayFactor();
+        if (player.getMainHandStack().getItem() instanceof WeaponItem item) {
+            currentVerticalRecoil *= item.getSettings().getRecoilDepthMultiplier();
+            currentHorizontalRecoil *= item.getSettings().getRecoilDepthMultiplier();
         } else {
             currentVerticalRecoil *= BASE_RECOIL_DECAY;
             currentHorizontalRecoil *= BASE_RECOIL_DECAY;

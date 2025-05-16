@@ -1,6 +1,6 @@
 package lumen.terminate_protocol.mixin.client;
 
-import lumen.terminate_protocol.item.guns.AbstractWeaponItem;
+import lumen.terminate_protocol.item.weapon.WeaponItem;
 import lumen.terminate_protocol.weapon_handler.ClientWeaponActionHandler;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HeldItemRendererMixin {
     @Inject(method = "renderFirstPersonItem", at = @At("HEAD"))
     private void onRenderFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (ClientWeaponActionHandler.getWasAiming() && item.getItem() instanceof AbstractWeaponItem item1) {
+        if (ClientWeaponActionHandler.getWasAiming() && item.getItem() instanceof WeaponItem item1) {
             matrices.push();
 
-            Vec3d pos = item1.getAimPos();
+            Vec3d pos = item1.getSettings().getAimOffset();
             matrices.translate(pos.x, pos.y, pos.z);
             matrices.scale(1.5f, 1.5f, 1.5f);
         }

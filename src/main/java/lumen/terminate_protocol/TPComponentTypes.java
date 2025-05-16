@@ -7,9 +7,15 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class TPComponentTypes {
-    public static final ComponentType<Boolean> GUN_RELOADING_TYPE = Registry.register(
+    public static final ComponentType<Boolean> WPN_RELOADING_TYPE = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(TerminateProtocol.MOD_ID, "gun_reloading"),
+            Identifier.of(TerminateProtocol.MOD_ID, "wpn_reloading"),
+            ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
+    );
+
+    public static final ComponentType<Boolean> WPN_PULLBOLT_TYPE = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(TerminateProtocol.MOD_ID, "wpn_pullbolt"),
             ComponentType.<Boolean>builder().codec(Codec.BOOL).build()
     );
 

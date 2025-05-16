@@ -1,6 +1,6 @@
-package lumen.terminate_protocol.item.guns;
+package lumen.terminate_protocol.item.weapon;
 
-public enum WeaponSoundStage {
+public enum WeaponStage {
     FIRE,
     FIRE_LOW_AMMO,
     BOLTBACK,

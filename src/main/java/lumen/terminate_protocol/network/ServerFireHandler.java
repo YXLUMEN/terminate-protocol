@@ -1,6 +1,6 @@
 package lumen.terminate_protocol.network;
 
-import lumen.terminate_protocol.item.guns.AbstractWeaponItem;
+import lumen.terminate_protocol.item.weapon.WeaponItem;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,9 +14,9 @@ public class ServerFireHandler {
                 ServerPlayerEntity player = context.player();
                 ItemStack stack = player.getMainHandStack();
 
-                if (!(stack.getItem() instanceof AbstractWeaponItem firearmsItem)) return;
+                if (!(stack.getItem() instanceof WeaponItem item)) return;
 
-                firearmsItem.onFire(player.getWorld(), player, stack);
+                item.doFire(player.getWorld(), player, stack);
             });
         });
 
@@ -24,8 +24,8 @@ public class ServerFireHandler {
             ServerPlayerEntity player = context.player();
             ItemStack stack = player.getMainHandStack();
 
-            if (stack.getItem() instanceof AbstractWeaponItem firearmsItem) {
-                firearmsItem.onReload(player.getWorld(), player, stack);
+            if (stack.getItem() instanceof WeaponItem item) {
+                item.doReload(player.getWorld(), player, stack);
             }
         }));
     }

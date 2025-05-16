@@ -18,8 +18,6 @@ public class TPItemsGroup {
                         .icon(() -> new ItemStack(SMOKE_GRENADE))
                         .displayName(Text.translatable("itemGroup.terminate-protocol"))
                         .entries((displayContext, entries) -> {
-                            entries.add(VK47);
-                            entries.add(MINI_GUN);
                             entries.add(R99);
                             entries.add(KRABER);
 

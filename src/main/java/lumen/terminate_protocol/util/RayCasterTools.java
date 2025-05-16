@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -88,5 +90,18 @@ public class RayCasterTools {
         float h = MathHelper.cos(yaw * (float) (Math.PI / 180.0)) * MathHelper.cos(pitch * (float) (Math.PI / 180.0));
 
         return new Vec3d(f, g, h).normalize();
+    }
+
+    public static int findItemSlot(PlayerEntity player, Item item) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (stack.isOf(item)) return i;
+        }
+        return -1;
+    }
+
+    public static Vec3d getMuzzleOffset(PlayerEntity player, Vec3d lookVec) {
+        Vec3d rightOffset = new Vec3d(-lookVec.z, 0, lookVec.x).normalize().multiply(0.3);
+        return player.getEyePos().add(rightOffset).add(0, -0.3, 0);
     }
 }

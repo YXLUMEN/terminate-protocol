@@ -1,7 +1,7 @@
 package lumen.terminate_protocol.weapon_handler;
 
 import lumen.terminate_protocol.TPKeyBind;
-import lumen.terminate_protocol.item.guns.AbstractWeaponItem;
+import lumen.terminate_protocol.item.weapon.WeaponItem;
 import lumen.terminate_protocol.render.AimFovRender;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -23,9 +23,9 @@ public class ClientWeaponActionHandler {
             if (player == null) return;
 
             ItemStack stack = player.getMainHandStack();
-            if (!(stack.getItem() instanceof AbstractWeaponItem item)) return;
+            if (!(stack.getItem() instanceof WeaponItem item)) return;
 
-            final boolean isFiring = TPKeyBind.WEAPON_FIRE_KEY.isPressed();
+            final boolean isFiring = client.options.attackKey.isPressed();
             final boolean isAiming = client.options.useKey.isPressed();
 
             if (isFiring != wasFiring) {
@@ -42,7 +42,7 @@ public class ClientWeaponActionHandler {
 
             if (isAiming != wasAiming) {
                 wasAiming = isAiming;
-                AimFovRender.setTargetFOVMultiplier(isAiming ? item.getAimFOVMultiplier() : 1.0f);
+                AimFovRender.setTargetFOVMultiplier(isAiming ? item.getSettings().getAimFOVMultiplier() : 1.0f);
             }
 
             if (TPKeyBind.WEAPON_RELOAD_KEY.isPressed()) {

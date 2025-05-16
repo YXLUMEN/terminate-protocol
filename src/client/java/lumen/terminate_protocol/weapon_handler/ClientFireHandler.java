@@ -1,6 +1,6 @@
 package lumen.terminate_protocol.weapon_handler;
 
-import lumen.terminate_protocol.item.guns.AbstractWeaponItem;
+import lumen.terminate_protocol.item.weapon.WeaponItem;
 import lumen.terminate_protocol.network.GunFireC2SPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -12,9 +12,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-import static lumen.terminate_protocol.item.guns.AbstractWeaponItem.getMuzzleOffset;
-import static lumen.terminate_protocol.util.RayCasterTools.drawTrack;
-import static lumen.terminate_protocol.util.RayCasterTools.getPlayerLookVec;
+import static lumen.terminate_protocol.util.RayCasterTools.*;
 
 public class ClientFireHandler {
     private static boolean startFire = false;
@@ -33,20 +31,20 @@ public class ClientFireHandler {
         if (itemStack.getDamage() >= itemStack.getMaxDamage()) return;
 
         long currentTime = System.currentTimeMillis();
-        AbstractWeaponItem item = (AbstractWeaponItem) itemStack.getItem();
+        WeaponItem item = (WeaponItem) itemStack.getItem();
 
         if (currentTime - lastFireTime < lastFireCooldown) {
-            if (startFire && item.getRecoilType() == 1) onEndFire(item);
+            if (startFire && item.getSettings().getRecoilType() == 1) onEndFire(item);
             return;
         }
 
         lastFireTime = currentTime;
-        lastFireCooldown = item.getFireRant();
+        lastFireCooldown = item.getSettings().getFireRate();
 
         Vec3d lookVec = getPlayerLookVec(player);
         Vec3d muzzlePos = isAiming ? player.getEyePos() : getMuzzleOffset(player, lookVec);
 
-        createBulletTrack(player, muzzlePos, item.getRecoilType() == 1);
+        createBulletTrack(player, muzzlePos, item.getSettings().getRecoilType() == 1);
         if (!isAiming) spawnMuzzleFlash(player, muzzlePos, lookVec);
 
         // 后坐力控制
@@ -63,8 +61,8 @@ public class ClientFireHandler {
         if (!startFire) onStartFire();
     }
 
-    public static void onEndFire(AbstractWeaponItem item) {
-        if (item.getRecoilType() == 1) {
+    public static void onEndFire(WeaponItem item) {
+        if (item.getSettings().getRecoilType() == 1) {
             WeaponRecoilSystem.applyRecovery(verticalOffset, horizontalOffset);
         }
 
