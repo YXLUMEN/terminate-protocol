@@ -14,7 +14,7 @@ public class R99Item extends WeaponItem {
     public R99Item(Settings settings) {
         super(settings.maxDamage(21),
                 new WeaponSettings(20, 24, TPItems.LIGHT_AMMO)
-                        .setAimOffset(new Vec3d(-0.521f, 0.01f, 0))
+                        .setAimOffset(new Vec3d(-0.514f, 0.15, 0))
                         .setAimFovMultiplier(0.8f)
                         .setRecoilDecayMultiplier(0.3f),
                 new TrajectoryRayCaster()

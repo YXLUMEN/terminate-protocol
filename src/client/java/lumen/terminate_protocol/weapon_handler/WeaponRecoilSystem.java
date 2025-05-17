@@ -3,6 +3,7 @@ package lumen.terminate_protocol.weapon_handler;
 import lumen.terminate_protocol.item.weapon.WeaponItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class WeaponRecoilSystem {
@@ -55,5 +56,11 @@ public class WeaponRecoilSystem {
         currentHorizontalRecoil = recoveryHorizontalRecoil;
         recoveryVerticalRecoil = 0;
         recoveryHorizontalRecoil = 0;
+    }
+
+    public static boolean heldWeapon() {
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null) return false;
+        return player.getMainHandStack().getItem() instanceof WeaponItem;
     }
 }

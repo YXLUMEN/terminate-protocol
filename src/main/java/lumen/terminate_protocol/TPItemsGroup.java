@@ -19,6 +19,7 @@ public class TPItemsGroup {
                         .displayName(Text.translatable("itemGroup.terminate-protocol"))
                         .entries((displayContext, entries) -> {
                             entries.add(R99);
+                            entries.add(SPITFIRE);
                             entries.add(KRABER);
 
                             entries.add(FRAG_GRENADE);

@@ -45,7 +45,7 @@ public class ClientWeaponActionHandler {
                 AimFovRender.setTargetFOVMultiplier(isAiming ? item.getSettings().getAimFOVMultiplier() : 1.0f);
             }
 
-            if (TPKeyBind.WEAPON_RELOAD_KEY.isPressed()) {
+            if (TPKeyBind.REGISTER_KEY_BINDING.isPressed()) {
                 ClientReloadHandler.startReload(player, stack);
             }
         });

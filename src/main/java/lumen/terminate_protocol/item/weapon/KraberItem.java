@@ -17,7 +17,7 @@ public class KraberItem extends WeaponItem {
                         .setRecoilType((short) 1)
                         .setAimFovMultiplier(0.1f)
                         .setRecoilDecayMultiplier(0.95f)
-                        .setAimOffset(new Vec3d(-0.5115f, 0.0073f, -0.2f)),
+                        .setAimOffset(new Vec3d(-0.5112f, 0.0073f, -0.2f)),
                 new TrajectoryRayCaster()
                         .showTrack(true)
                         .baseDamage(25)

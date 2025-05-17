@@ -3,10 +3,12 @@
   "package": "lumen.terminate_protocol.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "ClientPlayerEntityMixin",
     "EntityRenderersMixin",
     "GameOptionsMixin",
     "GameRendererMixin",
     "HeldItemRendererMixin",
+    "InGameHudMixin",
     "MinecraftClientMixin"
   ],
   "injectors": {

@@ -4,6 +4,7 @@ import lumen.terminate_protocol.TerminateProtocol;
 import lumen.terminate_protocol.item.grenade.*;
 import lumen.terminate_protocol.item.weapon.KraberItem;
 import lumen.terminate_protocol.item.weapon.R99Item;
+import lumen.terminate_protocol.item.weapon.SpitfireItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -30,6 +31,7 @@ public class TPItems {
 
     public static final Item KRABER = register("kraber", new KraberItem(new Item.Settings()));
     public static final Item R99 = register("r99", new R99Item(new Item.Settings()));
+    public static final Item SPITFIRE = register("spitfire", new SpitfireItem(new Item.Settings()));
 
     public static <T extends Item> T register(String id, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(TerminateProtocol.MOD_ID, id), item);
