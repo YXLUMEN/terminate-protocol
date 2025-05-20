@@ -1,6 +1,6 @@
-package lumen.terminate_protocol.util;
+package lumen.terminate_protocol.util.weapon;
 
-import lumen.terminate_protocol.network.GunFireSyncS2CPayload;
+import lumen.terminate_protocol.network.packet.WeaponFireResultSyncS2CPacket;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
@@ -16,18 +16,17 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-// debug
-public class RayCasterTools {
-    public static void syncTrack(Entity attacker, Vec3d start, Vec3d end) {
+public class WeaponHelper {
+    public static void syncTrack(Entity attacker, Vec3d start, Vec3d end, boolean important) {
         if (!attacker.isPlayer()) return;
-        var payload = new GunFireSyncS2CPayload(start, end);
+        var payload = new WeaponFireResultSyncS2CPacket(start, end, important);
         for (ServerPlayerEntity player : PlayerLookup.tracking(attacker)) {
             if (player == null || player.equals(attacker)) continue;
             ServerPlayNetworking.send(player, payload);
         }
     }
 
-    public static void drawTrack(World world, Vec3d start, Vec3d end) {
+    public static void clientDrawTrack(World world, Vec3d start, Vec3d end) {
         if (!world.isClient) return;
         Random random = world.getRandom();
 
@@ -43,6 +42,15 @@ public class RayCasterTools {
                     (random.nextFloat() - 0.5) * 0.03
             );
         }
+    }
+
+    public static void clientDrawBullet(World world, Vec3d start, Vec3d end) {
+        if (!world.isClient) return;
+
+        Vec3d endPos = start.add(end);
+
+        Vec3d velocity = endPos.subtract(start).multiply(0.8f);
+        world.addParticle(ParticleTypes.END_ROD, start.x, start.y, start.z, velocity.x, velocity.y, velocity.z);
     }
 
     public static void debugDrawRay(World world, Vec3d start, Vec3d end, SimpleParticleType particleType, int amplifier) {

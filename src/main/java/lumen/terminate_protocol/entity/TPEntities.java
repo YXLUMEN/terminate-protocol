@@ -1,6 +1,7 @@
 package lumen.terminate_protocol.entity;
 
 import lumen.terminate_protocol.TerminateProtocol;
+import lumen.terminate_protocol.entity.grenade.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;

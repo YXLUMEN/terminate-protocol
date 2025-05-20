@@ -1,7 +1,7 @@
 package lumen.terminate_protocol.item;
 
 
-import lumen.terminate_protocol.network.BatterySoundInterruptS2CPayload;
+import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
@@ -104,7 +104,7 @@ public class Battery extends Item {
         if (remainingUseTicks <= 0) return;
 
         if (user instanceof ServerPlayerEntity player) {
-            ServerPlayNetworking.send(player, new BatterySoundInterruptS2CPayload(this.shield >= 20 ? 0 : 1));
+            ServerPlayNetworking.send(player, new BatterySoundInterruptS2CPacket(this.shield >= 20 ? 0 : 1));
         }
         world.playSound(null, user.getX(), user.getY(), user.getZ(),
                 TPSoundEvents.BATTERY_CHARGE_FAIL, SoundCategory.PLAYERS);

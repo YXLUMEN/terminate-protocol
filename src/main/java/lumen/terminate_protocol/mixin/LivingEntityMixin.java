@@ -7,7 +7,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,18 +25,10 @@ public abstract class LivingEntityMixin {
 
         absorption.setBaseValue(0);
 
-        SoundEvent soundEvent = switch (livingEntity.getRandom().nextBetween(0, 3)) {
-            case 0 -> TPSoundEvents.SHIELD_CRASH_1;
-            case 1 -> TPSoundEvents.SHIELD_CRASH_2;
-            case 2 -> TPSoundEvents.SHIELD_CRASH_3;
-            case 3 -> TPSoundEvents.SHIELD_CRASH_4;
-            default -> null;
-        };
-
         if (livingEntity.getWorld() instanceof ServerWorld world) {
             world.playSound(null,
                     livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
-                    soundEvent, SoundCategory.NEUTRAL);
+                    TPSoundEvents.SHIELD_CRASH, SoundCategory.NEUTRAL);
             ci.cancel();
         }
     }

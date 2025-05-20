@@ -1,5 +1,6 @@
-package lumen.terminate_protocol.entity;
+package lumen.terminate_protocol.entity.grenade;
 
+import lumen.terminate_protocol.entity.TPEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

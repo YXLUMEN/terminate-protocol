@@ -12,7 +12,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Position;
 import net.minecraft.world.World;
-import lumen.terminate_protocol.entity.SmokeGrenadeEntity;
+import lumen.terminate_protocol.entity.grenade.SmokeGrenadeEntity;
 
 public class SmokeGrenadeItem extends Item implements ProjectileItem {
     private static final int COOLDOWN_TICKS = 20 * 3;

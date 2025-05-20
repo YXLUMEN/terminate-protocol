@@ -1,30 +1,50 @@
 package lumen.terminate_protocol.item.weapon;
 
+import lumen.terminate_protocol.api.WeaponFireMode;
+import lumen.terminate_protocol.api.WeaponStage;
+import lumen.terminate_protocol.damage_type.TPDamageTypes;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
-import lumen.terminate_protocol.util.TrajectoryRayCaster;
-import net.minecraft.sound.SoundEvent;
+import lumen.terminate_protocol.util.ISoundRecord;
+import lumen.terminate_protocol.util.SoundHelper;
+import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
-import java.util.List;
 import java.util.Map;
 
-public class KraberItem extends WeaponItem {
+public class KraberItem extends WeaponItem implements IPullbolt {
     public KraberItem(Settings settings) {
-        super(settings.maxDamage(12),
-                new WeaponSettings(1800, 60, TPItems.SNIPER_AMMO)
-                        .setRecoilType((short) 1)
+        super(settings.maxDamage(6),
+                new WeaponSettings(1800, 60, TPItems.SNIPER_AMMO, WeaponFireMode.BOLT)
                         .setAimFovMultiplier(0.1f)
                         .setRecoilDecayMultiplier(0.95f)
                         .setAimOffset(new Vec3d(-0.5112f, 0.0073f, -0.2f)),
                 new TrajectoryRayCaster()
                         .showTrack(true)
-                        .baseDamage(25)
+                        .isImportant(true)
+                        .baseDamage(30)
                         .baseRayLength(160)
                         .bounceChance(0.2f)
-                        .healthBaseDamage(0.3f));
+                        .healthBaseDamage(0.3f)
+                        .setDamageType(TPDamageTypes.SNIPER_BULLET_HIT));
     }
+
+    private static final Map<Integer, WeaponStage> reloadStages = Map.of(
+            55, WeaponStage.MAGOUT,
+            32, WeaponStage.MAGIN,
+            11, WeaponStage.BOLTBACK,
+            0, WeaponStage.BOLTFORWARD
+    );
+
+    private static final Map<WeaponStage, ISoundRecord> sounds = Map.of(
+            WeaponStage.FIRE, SoundHelper.of(TPSoundEvents.KRABER_FIRE),
+            WeaponStage.FIRE_LOW_AMMO, SoundHelper.of(TPSoundEvents.KRABER_FIRE),
+            WeaponStage.BOLTBACK, SoundHelper.of(TPSoundEvents.KRABER_BOLTBACK),
+            WeaponStage.BOLTFORWARD, SoundHelper.of(TPSoundEvents.KRABER_BOLTFORWARD),
+            WeaponStage.MAGIN, SoundHelper.of(TPSoundEvents.KRABER_MAGIN),
+            WeaponStage.MAGOUT, SoundHelper.of(TPSoundEvents.KRABER_MAGOUT)
+    );
 
     @Override
     public float getVerticalRecoil(Random random) {
@@ -37,26 +57,17 @@ public class KraberItem extends WeaponItem {
     }
 
     @Override
-    public WeaponStage getReloadStage(float reloadTick) {
-        if (reloadTick == 0.55f) return WeaponStage.MAGIN;
-        else if (reloadTick == 0.25f) return WeaponStage.BOLTBACK;
-        else if (reloadTick == 0.0f) return WeaponStage.BOLTFORWARD;
-        return null;
+    public int getPullboltTick() {
+        return 25;
     }
 
-    private static final Map<WeaponStage, List<SoundEvent>> sounds = Map.of(
-            WeaponStage.FIRE, List.of(TPSoundEvents.KRABER_FIRE),
-            WeaponStage.FIRE_LOW_AMMO, List.of(TPSoundEvents.KRABER_FIRE),
-            WeaponStage.BOLTBACK, List.of(TPSoundEvents.KRABER_BOLTBACK_1, TPSoundEvents.KRABER_BOLTBACK_2, TPSoundEvents.KRABER_BOLTBACK_3),
-            WeaponStage.BOLTFORWARD, List.of(TPSoundEvents.KRABER_BOLTFORWARD_1, TPSoundEvents.KRABER_BOLTFORWARD_2, TPSoundEvents.KRABER_BOLTFORWARD_3),
-            WeaponStage.MAGIN, List.of(TPSoundEvents.KRABER_MAGIN),
-            WeaponStage.MAGOUT, List.of(TPSoundEvents.KRABER_MAGOUT)
-    );
+    @Override
+    public WeaponStage getReloadStageFromTick(int reloadTick) {
+        return reloadStages.get(reloadTick);
+    }
 
-    public SoundEvent getStageSound(WeaponStage stage) {
+    public ISoundRecord getStageSound(WeaponStage stage) {
         if (stage == null) return null;
-        List<SoundEvent> list = sounds.get(stage);
-        if (list == null) return null;
-        return list.get(this.random.nextInt(list.size()));
+        return sounds.get(stage);
     }
 }

@@ -1,8 +1,9 @@
-package lumen.terminate_protocol.entity;
+package lumen.terminate_protocol.entity.grenade;
 
 import lumen.terminate_protocol.effect.TPEffects;
+import lumen.terminate_protocol.entity.TPEntities;
 import lumen.terminate_protocol.item.TPItems;
-import lumen.terminate_protocol.network.FlashEffectS2CPayload;
+import lumen.terminate_protocol.network.packet.FlashEffectS2CPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -137,7 +138,7 @@ public class FlashGrenadeEntity extends AbstractGrenadeEntity {
         float effectiveStrength = (float) Math.pow(impact, 1.5);
         int duration = 50 + (int) (150 * effectiveStrength);
 
-        ServerPlayNetworking.send(player, new FlashEffectS2CPayload(effectiveStrength));
+        ServerPlayNetworking.send(player, new FlashEffectS2CPacket(effectiveStrength));
         player.addStatusEffect(new StatusEffectInstance(
                 TPEffects.FLASHED, duration, 0, true, true
         ));

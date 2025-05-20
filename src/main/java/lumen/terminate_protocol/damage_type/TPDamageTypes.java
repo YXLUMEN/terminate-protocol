@@ -11,4 +11,5 @@ public interface TPDamageTypes {
     RegistryKey<DamageType> FRAGMENT_HIT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(TerminateProtocol.MOD_ID, "fragment_hit"));
     RegistryKey<DamageType> LIGHT_BULLET_HIT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(TerminateProtocol.MOD_ID, "light_bullet"));
     RegistryKey<DamageType> HEAVY_BULLET_HIT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(TerminateProtocol.MOD_ID, "heavy_bullet"));
+    RegistryKey<DamageType> SNIPER_BULLET_HIT = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(TerminateProtocol.MOD_ID, "sniper_bullet"));
 }

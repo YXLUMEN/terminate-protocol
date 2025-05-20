@@ -13,7 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import lumen.terminate_protocol.network.BatterySoundInterruptS2CPayload;
+import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 
 import static lumen.terminate_protocol.item.Battery.spawnChargingParticles;
@@ -85,7 +85,7 @@ public class MedKit extends Item {
         if (remainingUseTicks <= 0) return;
 
         if (user instanceof ServerPlayerEntity player) {
-            ServerPlayNetworking.send(player, new BatterySoundInterruptS2CPayload(2));
+            ServerPlayNetworking.send(player, new BatterySoundInterruptS2CPacket(2));
         }
         world.playSound(null, user.getX(), user.getY(), user.getZ(),
                 TPSoundEvents.KIT_FAIL, SoundCategory.PLAYERS);

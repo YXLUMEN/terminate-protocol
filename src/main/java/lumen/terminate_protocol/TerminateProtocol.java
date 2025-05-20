@@ -3,10 +3,10 @@ package lumen.terminate_protocol;
 import lumen.terminate_protocol.effect.TPEffects;
 import lumen.terminate_protocol.entity.TPEntities;
 import lumen.terminate_protocol.item.TPItems;
+import lumen.terminate_protocol.network.ServerFireHandler;
 import lumen.terminate_protocol.network.TPNetwork;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +29,6 @@ public class TerminateProtocol implements ModInitializer {
         TPEffects.registerEffects();
         TPSoundEvents.registerSounds();
 
-        ServerTickEvents.END_SERVER_TICK.register(minecraftServer -> {
-
-        });
+        ServerFireHandler.register();
     }
 }

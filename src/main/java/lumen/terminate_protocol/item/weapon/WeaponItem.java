@@ -1,7 +1,12 @@
 package lumen.terminate_protocol.item.weapon;
 
 import lumen.terminate_protocol.TPComponentTypes;
-import lumen.terminate_protocol.util.TrajectoryRayCaster;
+import lumen.terminate_protocol.api.WeaponStage;
+import lumen.terminate_protocol.util.ISoundRecord;
+import lumen.terminate_protocol.util.SoundHelper;
+import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
+import lumen.terminate_protocol.util.weapon.WeaponCooldownAccessor;
+import lumen.terminate_protocol.util.weapon.WeaponCooldownManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,9 +21,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import static lumen.terminate_protocol.util.RayCasterTools.findItemSlot;
-import static lumen.terminate_protocol.util.RayCasterTools.getPlayerLookVec;
+import static lumen.terminate_protocol.util.weapon.WeaponHelper.findItemSlot;
+import static lumen.terminate_protocol.util.weapon.WeaponHelper.getPlayerLookVec;
 
 public abstract class WeaponItem extends Item implements IWeaponSettings {
     private final WeaponSettings weaponSettings;
@@ -41,8 +47,9 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
         if (world.isClient || currentAmmo >= maxAmmo) return;
 
-        if (player.getItemCooldownManager().isCoolingDown(this) && !stack.getOrDefault(TPComponentTypes.WPN_PULLBOLT_TYPE, false)) {
-            player.getItemCooldownManager().set(this, 0);
+        WeaponCooldownManager manager = ((WeaponCooldownAccessor) player).getWeaponCooldownManager();
+        if (manager.isCoolingDown(this)) {
+            manager.set(this, 0);
             stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
         }
 
@@ -52,32 +59,27 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         Vec3d muzzlePos = player.getEyePos();
 
         this.raycaster.rayCast((ServerWorld) world, player, muzzlePos, lookVec);
-        if (((WeaponItem) stack.getItem()).getSettings().getRecoilType() == 1) {
-            player.getItemCooldownManager().set(this, 20);
-            stack.set(TPComponentTypes.WPN_PULLBOLT_TYPE, true);
-        }
 
         boolean lowAmmo = ((float) currentAmmo / maxAmmo) > 0.65f;
-        SoundEvent sound = this.getStageSound(lowAmmo ? WeaponStage.FIRE_LOW_AMMO : WeaponStage.FIRE);
-        if (sound == null) return;
+        ISoundRecord record = this.getStageSound(lowAmmo ? WeaponStage.FIRE_LOW_AMMO : WeaponStage.FIRE);
+        if (record == null) return;
 
-        world.playSound(null, player.getBlockPos(), sound, SoundCategory.PLAYERS);
+        playSoundRecord(record, world, player, player.getPos());
     }
 
     public void doReload(World world, PlayerEntity player, ItemStack stack) {
-        if (world.isClient || stack.getDamage() == 0 || player.getItemCooldownManager().isCoolingDown(this)) return;
+        if (world.isClient || stack.getDamage() == 0) return;
+        WeaponCooldownManager manager = ((WeaponCooldownAccessor) player).getWeaponCooldownManager();
 
-        player.getItemCooldownManager().set(this, this.weaponSettings.getReloadTick());
+        if (manager.isCoolingDown(this)) return;
+
+        manager.set(this, this.weaponSettings.getReloadTick());
         stack.set(TPComponentTypes.WPN_RELOADING_TYPE, true);
-
-        SoundEvent sound = this.getStageSound(WeaponStage.MAGOUT);
-        if (sound == null) return;
-        world.playSound(null, player.getBlockPos(), sound, SoundCategory.PLAYERS);
     }
 
     private void restoreAmmo(ItemStack stack, PlayerEntity player) {
         stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
-        player.getItemCooldownManager().set(this, 0);
+        ((WeaponCooldownAccessor) player).getWeaponCooldownManager().set(this, 0);
 
         if (player.isCreative()) {
             stack.setDamage(0);
@@ -100,43 +102,47 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         if (world.isClient || !entity.isPlayer()) return;
 
         if (stack.getOrDefault(TPComponentTypes.WPN_RELOADING_TYPE, false)) {
-            this.reloadAction(world, (PlayerEntity) entity, stack);
-        }
-
-        if (stack.getOrDefault(TPComponentTypes.WPN_PULLBOLT_TYPE, false)) {
-            PlayerEntity player = (PlayerEntity) entity;
-            float reloadTick = player.getItemCooldownManager().getCooldownProgress(this, 0.0f);
-            if (reloadTick > 0.5f) return;
-
-            WeaponStage stage = this.getReloadStage(reloadTick);
-            if (stage == WeaponStage.BOLTFORWARD) stack.set(TPComponentTypes.WPN_PULLBOLT_TYPE, false);
-
-            SoundEvent sound = this.getStageSound(stage);
-            if (sound == null) return;
-            world.playSound(null, player.getBlockPos(), sound, SoundCategory.PLAYERS);
+            this.reloadAction(world, (PlayerEntity) entity, stack, selected);
         }
     }
 
-    private void reloadAction(World world, PlayerEntity player, ItemStack stack) {
-        if (!player.getMainHandStack().equals(stack)) {
-            player.getItemCooldownManager().set(this, 0);
+    private void reloadAction(World world, PlayerEntity player, ItemStack stack, boolean selected) {
+        WeaponCooldownManager manager = ((WeaponCooldownAccessor) player).getWeaponCooldownManager();
+
+        if (!selected) {
+            manager.set(this, 0);
             stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
             return;
         }
 
-        float reloadTick = player.getItemCooldownManager().getCooldownProgress(this, 0.0f);
+        int reloadTick = manager.getCooldownTicks(this);
+        WeaponStage stage = this.getReloadStageFromTick(reloadTick);
+        if (stage == null) return;
 
-        WeaponStage stage = this.getReloadStage(reloadTick);
         boolean quickCharge = stack.getDamage() < stack.getMaxDamage();
 
         if (stage == (quickCharge ? WeaponStage.MAGIN : WeaponStage.BOLTFORWARD)) {
             restoreAmmo(stack, player);
         }
 
-        if (quickCharge && stage != WeaponStage.MAGIN) return;
-        SoundEvent sound = this.getStageSound(stage);
-        if (sound == null) return;
-        world.playSound(null, player.getBlockPos(), sound, SoundCategory.PLAYERS);
+        if (quickCharge && (stage == WeaponStage.BOLTBACK || stage == WeaponStage.BOLTFORWARD)) return;
+        ISoundRecord record = this.getStageSound(stage);
+        if (record == null) return;
+
+        playSoundRecord(record, world, null, player.getPos());
+    }
+
+    private static void playSoundRecord(ISoundRecord record, World world, @Nullable PlayerEntity player, Vec3d pos) {
+        if (record instanceof SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch)) {
+            world.playSound(player, pos.x, pos.y, pos.z, sound, SoundCategory.PLAYERS, volume, pitch);
+            return;
+        }
+
+        if (record instanceof SoundHelper.MultiSound(java.util.List<SoundHelper.SingleSound> sounds)) {
+            sounds.forEach(singleSound -> world.playSound(player,
+                    pos.x, pos.y, pos.z,
+                    singleSound.sound(), SoundCategory.PLAYERS, singleSound.volume(), singleSound.pitch()));
+        }
     }
 
     @Override

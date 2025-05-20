@@ -1,13 +1,11 @@
 package lumen.terminate_protocol.render;
 
-import net.minecraft.client.gui.DrawContext;
-
 public class AimFovRender {
     private static final float TRANSITION_SPEED = 0.3f;
     private static float targetFovMultiplier = 1.0f;
     private static float currentFovMultiplier = 1.0f;
 
-    public static void updateFov(DrawContext drawContext) {
+    public static void updateFov() {
         if (currentFovMultiplier == targetFovMultiplier) return;
         float diff = targetFovMultiplier - currentFovMultiplier;
         if (Math.abs(diff) > 0.001f) {

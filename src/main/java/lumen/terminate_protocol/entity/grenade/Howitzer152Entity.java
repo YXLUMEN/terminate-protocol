@@ -1,8 +1,9 @@
-package lumen.terminate_protocol.entity;
+package lumen.terminate_protocol.entity.grenade;
 
 
+import lumen.terminate_protocol.entity.TPEntities;
 import lumen.terminate_protocol.item.TPItems;
-import lumen.terminate_protocol.util.TrajectoryRayCaster;
+import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -10,7 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import static lumen.terminate_protocol.util.RayCasterTools.getRandomDirection;
+import static lumen.terminate_protocol.util.weapon.WeaponHelper.getRandomDirection;
 
 
 public class Howitzer152Entity extends AbstractGrenadeEntity {

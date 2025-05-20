@@ -1,5 +1,6 @@
 package lumen.terminate_protocol.item.weapon;
 
+import lumen.terminate_protocol.api.WeaponFireMode;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.Vec3d;
 
@@ -8,18 +9,20 @@ public class WeaponSettings {
     private final int reloadTick;
     private final Item ammoType;
 
-    private short recoilType = 0;
+    private WeaponFireMode recoilType;
     private float aimFOVMultiplier = 1.0f;
     private float recoilDepthMultiplier = 1.0f;
     private Vec3d aimOffset = new Vec3d(0, 0, 0);
 
-    public WeaponSettings(int fireRate, int reloadTick, Item ammoType) {
+    public WeaponSettings(int fireRate, int reloadTick, Item ammoType, WeaponFireMode type) {
         this.fireRate = fireRate;
         this.reloadTick = reloadTick;
+
         this.ammoType = ammoType;
+        this.recoilType = type;
     }
 
-    public WeaponSettings setRecoilType(short type) {
+    public WeaponSettings setRecoilType(WeaponFireMode type) {
         this.recoilType = type;
         return this;
     }
@@ -51,7 +54,7 @@ public class WeaponSettings {
         return ammoType;
     }
 
-    public short getRecoilType() {
+    public WeaponFireMode getFireMode() {
         return recoilType;
     }
 

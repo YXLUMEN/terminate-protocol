@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import lumen.terminate_protocol.network.BatterySoundInterruptS2CPayload;
+import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 
 import java.util.Iterator;
@@ -116,7 +116,7 @@ public class PhoenixKit extends Item {
         if (remainingUseTicks <= 0) return;
 
         if (user instanceof ServerPlayerEntity player) {
-            ServerPlayNetworking.send(player, new BatterySoundInterruptS2CPayload(3));
+            ServerPlayNetworking.send(player, new BatterySoundInterruptS2CPacket(3));
         }
         world.playSound(null, user.getX(), user.getY(), user.getZ(),
                 TPSoundEvents.BATTERY_CHARGE_FAIL, SoundCategory.PLAYERS);

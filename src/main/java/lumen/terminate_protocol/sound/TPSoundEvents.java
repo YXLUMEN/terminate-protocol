@@ -27,34 +27,30 @@ public class TPSoundEvents {
     public static final SoundEvent KIT_FINISH = registerSound("kit.kit_finish");
     public static final SoundEvent KIT_FAIL = registerSound("kit.kit_fail");
 
-    public static final SoundEvent SHIELD_CRASH_1 = registerSound("shield_crash_1");
-    public static final SoundEvent SHIELD_CRASH_2 = registerSound("shield_crash_2");
-    public static final SoundEvent SHIELD_CRASH_3 = registerSound("shield_crash_3");
-    public static final SoundEvent SHIELD_CRASH_4 = registerSound("shield_crash_4");
+    public static final SoundEvent SHIELD_CRASH = registerSound("shield_crash");
 
-    public static final SoundEvent LIGHT_BULLET_HIT_1 = registerSound("light_bullet_hit_1");
-    public static final SoundEvent LIGHT_BULLET_HIT_2 = registerSound("light_bullet_hit_2");
-    public static final SoundEvent LIGHT_BULLET_HIT_3 = registerSound("light_bullet_hit_3");
-    public static final SoundEvent LIGHT_BULLET_HIT_4 = registerSound("light_bullet_hit_4");
+    public static final SoundEvent LIGHT_BULLET_HIT = registerSound("light_bullet_hit");
 
     public static final SoundEvent KRABER_FIRE = registerSound("kraber.fire");
-    public static final SoundEvent KRABER_BOLTBACK_1 = registerSound("kraber.reload_boltback_1");
-    public static final SoundEvent KRABER_BOLTBACK_2 = registerSound("kraber.reload_boltback_2");
-    public static final SoundEvent KRABER_BOLTBACK_3 = registerSound("kraber.reload_boltback_3");
-    public static final SoundEvent KRABER_BOLTFORWARD_1 = registerSound("kraber.reload_boltforward_1");
-    public static final SoundEvent KRABER_BOLTFORWARD_2 = registerSound("kraber.reload_boltforward_2");
-    public static final SoundEvent KRABER_BOLTFORWARD_3 = registerSound("kraber.reload_boltforward_3");
+    public static final SoundEvent KRABER_BOLTBACK = registerSound("kraber.reload_boltback");
+    public static final SoundEvent KRABER_BOLTFORWARD = registerSound("kraber.reload_boltforward");
     public static final SoundEvent KRABER_MAGIN = registerSound("kraber.reload_magin");
     public static final SoundEvent KRABER_MAGOUT = registerSound("kraber.reload_magout");
 
-    public static final SoundEvent R99_FIRE_1 = registerSound("r99.fire_1");
-    public static final SoundEvent R99_FIRE_2 = registerSound("r99.fire_2");
-    public static final SoundEvent R99_FIRE_LOW_AMMO_1 = registerSound("r99.fire_low_ammo_1");
-    public static final SoundEvent R99_FIRE_LOW_AMMO_2 = registerSound("r99.fire_low_ammo_2");
+    public static final SoundEvent R99_FIRE = registerSound("r99.fire");
+    public static final SoundEvent R99_FIRE_LOW_AMMO = registerSound("r99.fire_low_ammo");
     public static final SoundEvent R99_MAGIN = registerSound("r99.reload_magin");
     public static final SoundEvent R99_MAGOUT = registerSound("r99.reload_magout");
     public static final SoundEvent R99_BOLTBACK = registerSound("r99.reload_boltback");
     public static final SoundEvent R99_BOLTFORWARD = registerSound("r99.reload_boltforward");
+
+    public static final SoundEvent SPITFIRE_FIRE = registerSound("spitfire.fire");
+    public static final SoundEvent SPITFIRE_FIRE_MECH = registerSound("spitfire.fire_mech");
+    public static final SoundEvent SPITFIRE_MAGIN = registerSound("spitfire.reload_magin");
+    public static final SoundEvent SPITFIRE_MAGOUT = registerSound("spitfire.reload_magout");
+    public static final SoundEvent SPITFIRE_MAGPAT = registerSound("spitfire.reload_magpat");
+    public static final SoundEvent SPITFIRE_BOLTBACK = registerSound("spitfire.reload_boltback");
+    public static final SoundEvent SPITFIRE_BOLTFORWARD = registerSound("spitfire.reload_boltforward");
 
     private static SoundEvent registerSound(String id) {
         Identifier identifier = Identifier.of(TerminateProtocol.MOD_ID, id);

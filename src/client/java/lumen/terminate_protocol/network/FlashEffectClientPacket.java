@@ -1,5 +1,6 @@
 package lumen.terminate_protocol.network;
 
+import lumen.terminate_protocol.network.packet.FlashEffectS2CPacket;
 import lumen.terminate_protocol.render.FlashEffectRenderer;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -10,7 +11,7 @@ import net.minecraft.sound.SoundCategory;
 
 public class FlashEffectClientPacket {
     public static void register() {
-        ClientPlayNetworking.registerGlobalReceiver(FlashEffectS2CPayload.ID, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(FlashEffectS2CPacket.ID, (payload, context) -> {
             float strength = payload.strength();
             FlashEffectRenderer.handleFlashEffect(strength);
 

@@ -1,4 +1,4 @@
-package lumen.terminate_protocol.entity;
+package lumen.terminate_protocol.entity.grenade;
 
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.minecraft.entity.EntityType;

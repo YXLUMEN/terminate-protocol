@@ -1,27 +1,48 @@
 package lumen.terminate_protocol.item.weapon;
 
+import lumen.terminate_protocol.api.WeaponFireMode;
+import lumen.terminate_protocol.api.WeaponStage;
+import lumen.terminate_protocol.damage_type.TPDamageTypes;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
-import lumen.terminate_protocol.util.TrajectoryRayCaster;
-import net.minecraft.sound.SoundEvent;
+import lumen.terminate_protocol.util.ISoundRecord;
+import lumen.terminate_protocol.util.SoundHelper;
+import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
-import java.util.List;
 import java.util.Map;
 
 public class R99Item extends WeaponItem {
     public R99Item(Settings settings) {
-        super(settings.maxDamage(21),
-                new WeaponSettings(20, 24, TPItems.LIGHT_AMMO)
+        super(settings.maxDamage(40),
+                new WeaponSettings(20, 32, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
                         .setAimOffset(new Vec3d(-0.514f, 0.15, 0))
                         .setAimFovMultiplier(0.8f)
                         .setRecoilDecayMultiplier(0.3f),
                 new TrajectoryRayCaster()
+                        .showTrack(true)
                         .baseDamage(2)
                         .baseRayLength(32)
-                        .bounceChance(0.2f));
+                        .bounceChance(0.2f)
+                        .setDamageType(TPDamageTypes.LIGHT_BULLET_HIT));
     }
+
+    private static final Map<Integer, WeaponStage> reloadStages = Map.of(
+            30, WeaponStage.MAGOUT,
+            20, WeaponStage.MAGIN,
+            6, WeaponStage.BOLTBACK,
+            0, WeaponStage.BOLTFORWARD
+    );
+
+    private static final Map<WeaponStage, ISoundRecord> sounds = Map.of(
+            WeaponStage.FIRE, SoundHelper.of(TPSoundEvents.R99_FIRE),
+            WeaponStage.FIRE_LOW_AMMO, SoundHelper.of(TPSoundEvents.R99_FIRE_LOW_AMMO, 0.8f),
+            WeaponStage.BOLTBACK, SoundHelper.of(TPSoundEvents.R99_BOLTBACK),
+            WeaponStage.BOLTFORWARD, SoundHelper.of(TPSoundEvents.R99_BOLTFORWARD),
+            WeaponStage.MAGIN, SoundHelper.of(TPSoundEvents.R99_MAGIN),
+            WeaponStage.MAGOUT, SoundHelper.of(TPSoundEvents.R99_MAGOUT)
+    );
 
     @Override
     public float getVerticalRecoil(Random random) {
@@ -34,27 +55,13 @@ public class R99Item extends WeaponItem {
     }
 
     @Override
-    public WeaponStage getReloadStage(float reloadTick) {
-        if (reloadTick == 0.625f) return WeaponStage.MAGIN;
-        else if (reloadTick == 0.25f) return WeaponStage.BOLTBACK;
-        else if (reloadTick <= 0.0f) return WeaponStage.BOLTFORWARD;
-        return null;
+    public WeaponStage getReloadStageFromTick(int reloadTick) {
+        return reloadStages.get(reloadTick);
     }
 
-    private static final Map<WeaponStage, List<SoundEvent>> sounds = Map.of(
-            WeaponStage.FIRE, List.of(TPSoundEvents.R99_FIRE_1, TPSoundEvents.R99_FIRE_2),
-            WeaponStage.FIRE_LOW_AMMO, List.of(TPSoundEvents.R99_FIRE_LOW_AMMO_1, TPSoundEvents.R99_FIRE_LOW_AMMO_2),
-            WeaponStage.BOLTBACK, List.of(TPSoundEvents.R99_BOLTBACK),
-            WeaponStage.BOLTFORWARD, List.of(TPSoundEvents.R99_BOLTFORWARD),
-            WeaponStage.MAGIN, List.of(TPSoundEvents.R99_MAGIN),
-            WeaponStage.MAGOUT, List.of(TPSoundEvents.R99_MAGOUT)
-    );
-
     @Override
-    public SoundEvent getStageSound(WeaponStage stage) {
+    public ISoundRecord getStageSound(WeaponStage stage) {
         if (stage == null) return null;
-        List<SoundEvent> list = sounds.get(stage);
-        if (list == null) return null;
-        return list.get(this.random.nextInt(list.size()));
+        return sounds.get(stage);
     }
 }

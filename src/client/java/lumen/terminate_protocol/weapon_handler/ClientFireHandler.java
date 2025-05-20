@@ -1,21 +1,32 @@
 package lumen.terminate_protocol.weapon_handler;
 
+import lumen.terminate_protocol.api.WeaponFireMode;
+import lumen.terminate_protocol.api.WeaponStage;
+import lumen.terminate_protocol.item.weapon.IPullbolt;
 import lumen.terminate_protocol.item.weapon.WeaponItem;
-import lumen.terminate_protocol.network.GunFireC2SPayload;
+import lumen.terminate_protocol.network.packet.GunFireC2SPacket;
+import lumen.terminate_protocol.util.ISoundRecord;
+import lumen.terminate_protocol.util.SoundHelper;
+import lumen.terminate_protocol.util.weapon.WeaponCooldownManager;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
-import static lumen.terminate_protocol.util.RayCasterTools.*;
+import static lumen.terminate_protocol.util.weapon.WeaponHelper.*;
+import static lumen.terminate_protocol.weapon_handler.ClientWeaponActionHandler.getIsPullbolt;
+import static lumen.terminate_protocol.weapon_handler.ClientWeaponActionHandler.getWasAiming;
 
 public class ClientFireHandler {
+    public static final WeaponCooldownManager pullboltManager = new WeaponCooldownManager();
     private static boolean startFire = false;
+    private static boolean canFire = false;
 
     private static long lastFireTime = 0;
     private static int lastFireCooldown = 0;
@@ -23,29 +34,33 @@ public class ClientFireHandler {
     private static float verticalOffset = 0;
     private static float horizontalOffset = 0;
 
-    public static void onStartFire() {
+    public static void doStartFire() {
         startFire = true;
     }
 
-    public static void onFireTick(ClientPlayerEntity player, ItemStack itemStack, boolean isAiming) {
-        if (itemStack.getDamage() >= itemStack.getMaxDamage()) return;
+    public static void doFireTick(ClientPlayerEntity player, ItemStack itemStack, WeaponItem item) {
+        canFire = false;
 
         long currentTime = System.currentTimeMillis();
-        WeaponItem item = (WeaponItem) itemStack.getItem();
-
+        WeaponFireMode fireMode = item.getSettings().getFireMode();
         if (currentTime - lastFireTime < lastFireCooldown) {
-            if (startFire && item.getSettings().getRecoilType() == 1) onEndFire(item);
+            if (startFire && fireMode == WeaponFireMode.BOLT) doEndFire(fireMode);
             return;
         }
 
+        final int currentAmmo = itemStack.getDamage();
+        final int maxAmmo = itemStack.getMaxDamage();
+        if (currentAmmo >= maxAmmo) return;
+        if (getIsPullbolt()) return;
+
+        canFire = true;
         lastFireTime = currentTime;
         lastFireCooldown = item.getSettings().getFireRate();
 
-        Vec3d lookVec = getPlayerLookVec(player);
-        Vec3d muzzlePos = isAiming ? player.getEyePos() : getMuzzleOffset(player, lookVec);
+        ClientPlayNetworking.send(new GunFireC2SPacket());
 
-        createBulletTrack(player, muzzlePos, item.getSettings().getRecoilType() == 1);
-        if (!isAiming) spawnMuzzleFlash(player, muzzlePos, lookVec);
+        Vec3d lookVec = getPlayerLookVec(player);
+        Vec3d muzzlePos = getWasAiming() ? player.getEyePos() : getMuzzleOffset(player, lookVec);
 
         // 后坐力控制
         Random random = player.getRandom();
@@ -55,14 +70,27 @@ public class ClientFireHandler {
 
         WeaponRecoilSystem.applyRecoil(verticalOffset, horizontalOffset);
 
-        GunFireC2SPayload payload = new GunFireC2SPayload(currentTime);
-        ClientPlayNetworking.send(payload);
+        // 开火特效
+        createBulletTrack(player, muzzlePos, fireMode == WeaponFireMode.BOLT);
+        if (!getWasAiming()) spawnMuzzleFlash(player, muzzlePos, lookVec);
 
-        if (!startFire) onStartFire();
+        // 音效处理
+        boolean lowAmmo = ((float) currentAmmo / maxAmmo) > 0.65f;
+        ISoundRecord fireRecord = item.getStageSound(lowAmmo ? WeaponStage.FIRE_LOW_AMMO : WeaponStage.FIRE);
+        if (fireRecord != null) clientPlaySoundRecord(fireRecord, player);
+
+        if (fireMode == WeaponFireMode.FULL_AUTOMATIC) return;
+
+        // 拉栓
+        int pullboltTick = ((IPullbolt) item).getPullboltTick();
+        pullboltManager.set(item, pullboltTick);
+
+        if (!startFire) startFire = true;
+        if (fireMode == WeaponFireMode.HALF_AUTOMATIC) doEndFire(fireMode);
     }
 
-    public static void onEndFire(WeaponItem item) {
-        if (item.getSettings().getRecoilType() == 1) {
+    public static void doEndFire(WeaponFireMode mode) {
+        if (mode != WeaponFireMode.FULL_AUTOMATIC) {
             WeaponRecoilSystem.applyRecovery(verticalOffset, horizontalOffset);
         }
 
@@ -70,6 +98,10 @@ public class ClientFireHandler {
 
         verticalOffset = 0;
         horizontalOffset = 0;
+    }
+
+    public static boolean canFire() {
+        return canFire;
     }
 
     private static void createBulletTrack(ClientPlayerEntity player, Vec3d startPos, boolean fullTrack) {
@@ -90,7 +122,7 @@ public class ClientFireHandler {
                 player
         ));
 
-        drawTrack(world, startPos, blockHit.getPos());
+        clientDrawTrack(world, startPos, blockHit.getPos());
     }
 
     private static void spawnMuzzleFlash(ClientPlayerEntity player, Vec3d muzzlePos, Vec3d direction) {
@@ -110,6 +142,17 @@ public class ClientFireHandler {
                     direction.x * 0.2 + random.nextGaussian() * 0.05,
                     0.05 + random.nextDouble() * 0.1,
                     direction.z * 0.2 + random.nextGaussian() * 0.05);
+        }
+    }
+
+    public static void clientPlaySoundRecord(ISoundRecord record, ClientPlayerEntity player) {
+        if (record instanceof SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch)) {
+            player.playSound(sound, volume, pitch);
+            return;
+        }
+
+        if (record instanceof SoundHelper.MultiSound(java.util.List<SoundHelper.SingleSound> sounds)) {
+            sounds.forEach(singleSound -> player.playSound(singleSound.sound(), singleSound.volume(), singleSound.pitch()));
         }
     }
 }

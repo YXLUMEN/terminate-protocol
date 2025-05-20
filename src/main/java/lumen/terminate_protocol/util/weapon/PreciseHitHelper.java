@@ -1,11 +1,12 @@
-package lumen.terminate_protocol.util;
+package lumen.terminate_protocol.util.weapon;
 
+import lumen.terminate_protocol.api.HitBoxType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Map;
 
-public class PreciseHitDetection {
+public class PreciseHitHelper {
     public static final Map<HitBoxType, Float> DAMAGE_MULTIPLIERS = Map.of(
             HitBoxType.HEAD, 2.0f,
             HitBoxType.CHEST, 1.0f,

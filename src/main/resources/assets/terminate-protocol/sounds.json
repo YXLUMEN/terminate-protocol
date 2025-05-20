@@ -95,27 +95,12 @@
       "terminate-protocol:kit/kit_finish"
     ]
   },
-  "shield_crash_1": {
-    "subtitle": "sound.terminate-protocol.shield_crash_1",
+  "shield_crash": {
+    "subtitle": "sound.terminate-protocol.shield_crash",
     "sounds": [
-      "terminate-protocol:shield_crash_1"
-    ]
-  },
-  "shield_crash_2": {
-    "subtitle": "sound.terminate-protocol.shield_crash_2",
-    "sounds": [
-      "terminate-protocol:shield_crash_2"
-    ]
-  },
-  "shield_crash_3": {
-    "subtitle": "sound.terminate-protocol.shield_crash_3",
-    "sounds": [
-      "terminate-protocol:shield_crash_3"
-    ]
-  },
-  "shield_crash_4": {
-    "subtitle": "sound.terminate-protocol.shield_crash_4",
-    "sounds": [
+      "terminate-protocol:shield_crash_1",
+      "terminate-protocol:shield_crash_2",
+      "terminate-protocol:shield_crash_3",
       "terminate-protocol:shield_crash_4"
     ]
   },
@@ -125,27 +110,12 @@
       "terminate-protocol:tinnitus"
     ]
   },
-  "light_bullet_hit_1": {
-    "subtitle": "sound.terminate-protocol.light_bullet_hit_1",
+  "light_bullet_hit": {
+    "subtitle": "sound.terminate-protocol.light_bullet_hit",
     "sounds": [
-      "terminate-protocol:light_bullet_hit_1"
-    ]
-  },
-  "light_bullet_hit_2": {
-    "subtitle": "sound.terminate-protocol.light_bullet_hit_2",
-    "sounds": [
-      "terminate-protocol:light_bullet_hit_2"
-    ]
-  },
-  "light_bullet_hit_3": {
-    "subtitle": "sound.terminate-protocol.light_bullet_hit_3",
-    "sounds": [
-      "terminate-protocol:light_bullet_hit_3"
-    ]
-  },
-  "light_bullet_hit_4": {
-    "subtitle": "sound.terminate-protocol.light_bullet_hit_4",
-    "sounds": [
+      "terminate-protocol:light_bullet_hit_1",
+      "terminate-protocol:light_bullet_hit_2",
+      "terminate-protocol:light_bullet_hit_3",
       "terminate-protocol:light_bullet_hit_4"
     ]
   },
@@ -155,39 +125,19 @@
       "terminate-protocol:kraber/fire"
     ]
   },
-  "kraber.reload_boltback_1": {
+  "kraber.reload_boltback": {
     "subtitle": "sound.terminate-protocol.kraber.boltback",
     "sounds": [
-      "terminate-protocol:kraber/reload_boltback_1"
-    ]
-  },
-  "kraber.reload_boltback_2": {
-    "subtitle": "sound.terminate-protocol.kraber.boltback",
-    "sounds": [
-      "terminate-protocol:kraber/reload_boltback_2"
-    ]
-  },
-  "kraber.reload_boltback_3": {
-    "subtitle": "sound.terminate-protocol.kraber.boltback",
-    "sounds": [
+      "terminate-protocol:kraber/reload_boltback_1",
+      "terminate-protocol:kraber/reload_boltback_2",
       "terminate-protocol:kraber/reload_boltback_3"
     ]
   },
-  "kraber.reload_boltforward_1": {
+  "kraber.reload_boltforward": {
     "subtitle": "sound.terminate-protocol.kraber.boltforward",
     "sounds": [
-      "terminate-protocol:kraber/reload_boltforward_1"
-    ]
-  },
-  "kraber.reload_boltforward_2": {
-    "subtitle": "sound.terminate-protocol.kraber.boltforward",
-    "sounds": [
-      "terminate-protocol:kraber/reload_boltforward_2"
-    ]
-  },
-  "kraber.reload_boltforward_3": {
-    "subtitle": "sound.terminate-protocol.kraber.boltforward",
-    "sounds": [
+      "terminate-protocol:kraber/reload_boltforward_1",
+      "terminate-protocol:kraber/reload_boltforward_2",
       "terminate-protocol:kraber/reload_boltforward_3"
     ]
   },
@@ -203,27 +153,16 @@
       "terminate-protocol:kraber/reload_magout"
     ]
   },
-  "r99.fire_1": {
+  "r99.fire": {
     "subtitle": "sound.terminate-protocol.r99.fire",
     "sounds": [
-      "terminate-protocol:r99/fire_1"
+      "terminate-protocol:r99/fire"
     ]
   },
-  "r99.fire_2": {
-    "subtitle": "sound.terminate-protocol.r99.fire",
-    "sounds": [
-      "terminate-protocol:r99/fire_2"
-    ]
-  },
-  "r99.fire_low_ammo_1": {
+  "r99.fire_low_ammo": {
     "subtitle": "sound.terminate-protocol.r99.fire_low_ammo",
     "sounds": [
-      "terminate-protocol:r99/fire_low_ammo_1"
-    ]
-  },
-  "r99.fire_low_ammo_2": {
-    "subtitle": "sound.terminate-protocol.r99.fire_low_ammo",
-    "sounds": [
+      "terminate-protocol:r99/fire_low_ammo_1",
       "terminate-protocol:r99/fire_low_ammo_2"
     ]
   },
@@ -249,6 +188,48 @@
     "subtitle": "sound.terminate-protocol.r99.reload_boltforward",
     "sounds": [
       "terminate-protocol:r99/reload_boltforward"
+    ]
+  },
+  "spitfire.fire": {
+    "subtitle": "sound.terminate-protocol.spitfire.fire",
+    "sounds": [
+      "terminate-protocol:spitfire/fire"
+    ]
+  },
+  "spitfire.fire_mech": {
+    "subtitle": "sound.terminate-protocol.spitfire.fire",
+    "sounds": [
+      "terminate-protocol:spitfire/fire_mech"
+    ]
+  },
+  "spitfire.reload_magin": {
+    "subtitle": "sound.terminate-protocol.spitfire.reload_magin",
+    "sounds": [
+      "terminate-protocol:spitfire/reload_magin"
+    ]
+  },
+  "spitfire.reload_magpat": {
+    "subtitle": "sound.terminate-protocol.spitfire.reload_magpat",
+    "sounds": [
+      "terminate-protocol:spitfire/reload_magpat"
+    ]
+  },
+  "spitfire.reload_magout": {
+    "subtitle": "sound.terminate-protocol.spitfire.reload_magout",
+    "sounds": [
+      "terminate-protocol:spitfire/reload_magout"
+    ]
+  },
+  "spitfire.reload_boltforward": {
+    "subtitle": "sound.terminate-protocol.spitfire.reload_boltforward",
+    "sounds": [
+      "terminate-protocol:spitfire/reload_boltforward"
+    ]
+  },
+  "spitfire.reload_boltback": {
+    "subtitle": "sound.terminate-protocol.spitfire.reload_boltback",
+    "sounds": [
+      "terminate-protocol:spitfire/reload_boltback"
     ]
   }
 }

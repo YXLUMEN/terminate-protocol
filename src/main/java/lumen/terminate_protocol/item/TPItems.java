@@ -23,11 +23,11 @@ public class TPItems {
 
     public static final Item HOWITZER_152 = register("howitzer152", new Howitzer152Item(new Item.Settings().maxCount(32)));
 
-    public static final Item LIGHT_AMMO = register("light_ammo", new AmmoItem(new Item.Settings().maxCount(72)));
-    public static final Item HEAVY_AMMO = register("heavy_ammo", new AmmoItem(new Item.Settings().maxCount(60)));
-    public static final Item ENERGY_AMMO = register("energy_ammo", new AmmoItem(new Item.Settings().maxCount(48)));
-    public static final Item SHRAPNEL_AMMO = register("shrapnel_ammo", new AmmoItem(new Item.Settings().maxCount(12)));
-    public static final Item SNIPER_AMMO = register("sniper_ammo", new AmmoItem(new Item.Settings().maxCount(8)));
+    public static final Item LIGHT_AMMO = register("light_ammo", new AmmoItem(new Item.Settings().maxCount(99)));
+    public static final Item HEAVY_AMMO = register("heavy_ammo", new AmmoItem(new Item.Settings().maxCount(90)));
+    public static final Item ENERGY_AMMO = register("energy_ammo", new AmmoItem(new Item.Settings().maxCount(86)));
+    public static final Item SHRAPNEL_AMMO = register("shrapnel_ammo", new AmmoItem(new Item.Settings().maxCount(80)));
+    public static final Item SNIPER_AMMO = register("sniper_ammo", new AmmoItem(new Item.Settings().maxCount(72)));
 
     public static final Item KRABER = register("kraber", new KraberItem(new Item.Settings()));
     public static final Item R99 = register("r99", new R99Item(new Item.Settings()));

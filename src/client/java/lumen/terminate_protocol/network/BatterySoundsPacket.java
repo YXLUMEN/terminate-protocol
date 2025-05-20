@@ -1,5 +1,6 @@
 package lumen.terminate_protocol.network;
 
+import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -8,7 +9,7 @@ import net.minecraft.sound.SoundEvent;
 
 public class BatterySoundsPacket {
     public static void register() {
-        ClientPlayNetworking.registerGlobalReceiver(BatterySoundInterruptS2CPayload.ID, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(BatterySoundInterruptS2CPacket.ID, (payload, context) -> {
             SoundEvent soundEvent = switch (payload.type()) {
                 case 1 -> TPSoundEvents.CELL_CHARGE;
                 case 2 -> TPSoundEvents.KIT_USING;

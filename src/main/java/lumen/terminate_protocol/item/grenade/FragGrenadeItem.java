@@ -1,6 +1,6 @@
 package lumen.terminate_protocol.item.grenade;
 
-import lumen.terminate_protocol.entity.FragGrenadeEntity;
+import lumen.terminate_protocol.entity.grenade.FragGrenadeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
