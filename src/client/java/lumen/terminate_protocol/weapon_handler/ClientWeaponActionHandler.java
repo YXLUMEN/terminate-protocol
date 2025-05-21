@@ -45,7 +45,7 @@ public class ClientWeaponActionHandler {
             if (isPullbolt) {
                 player.setSprinting(false);
                 WeaponStage stage = item.getReloadStageFromTick(pullbolt);
-                ISoundRecord record = item.getStageSound(stage);
+                ISoundRecord record = item.getStageSound(stage, stack);
                 if (record != null) clientPlaySoundRecord(record, player);
             }
             isPullbolt = pullbolt > 0;

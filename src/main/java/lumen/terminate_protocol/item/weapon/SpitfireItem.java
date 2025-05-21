@@ -8,6 +8,7 @@ import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
@@ -30,16 +31,16 @@ public class SpitfireItem extends WeaponItem {
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
-            59, WeaponStage.MAGOUT,
-            32, WeaponStage.MAGIN,
-            25, WeaponStage.MAGPAT,
+            55, WeaponStage.MAGOUT,
+            28, WeaponStage.MAGIN,
+            19, WeaponStage.MAGPAT,
             8, WeaponStage.BOLTBACK,
             0, WeaponStage.BOLTFORWARD
     );
 
     private static final Map<WeaponStage, ISoundRecord> sounds = Map.of(
             WeaponStage.FIRE, SoundHelper.builder().add(TPSoundEvents.SPITFIRE_FIRE, 1.0f).add(TPSoundEvents.SPITFIRE_FIRE_MECH, 0.8f).build(),
-            WeaponStage.FIRE_LOW_AMMO, SoundHelper.builder().add(TPSoundEvents.SPITFIRE_FIRE, 0.6f).add(TPSoundEvents.SPITFIRE_FIRE_MECH, 1.0f).build(),
+            WeaponStage.FIRE_LOW_AMMO, SoundHelper.of(TPSoundEvents.SPITFIRE_FIRE_MECH),
             WeaponStage.BOLTBACK, SoundHelper.of(TPSoundEvents.SPITFIRE_BOLTBACK),
             WeaponStage.BOLTFORWARD, SoundHelper.of(TPSoundEvents.SPITFIRE_BOLTFORWARD),
             WeaponStage.MAGIN, SoundHelper.of(TPSoundEvents.SPITFIRE_MAGIN),
@@ -63,8 +64,15 @@ public class SpitfireItem extends WeaponItem {
     }
 
     @Override
-    public ISoundRecord getStageSound(WeaponStage stage) {
+    public ISoundRecord getStageSound(WeaponStage stage, ItemStack stack) {
         if (stage == null) return null;
+        if (stage == WeaponStage.FIRE) {
+            float lowAmmo = (float) stack.getDamage() / stack.getMaxDamage();
+            if (lowAmmo >= 0.95) return sounds.get(WeaponStage.FIRE_LOW_AMMO);
+            if (lowAmmo >= 0.65f) return SoundHelper.builder()
+                    .add(TPSoundEvents.SPITFIRE_FIRE, 0.6f)
+                    .add(TPSoundEvents.SPITFIRE_FIRE_MECH, lowAmmo).build();
+        }
         return sounds.get(stage);
     }
 }

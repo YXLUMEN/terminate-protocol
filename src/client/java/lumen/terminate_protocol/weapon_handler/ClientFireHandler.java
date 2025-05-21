@@ -1,5 +1,6 @@
 package lumen.terminate_protocol.weapon_handler;
 
+import lumen.terminate_protocol.TPComponentTypes;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
 import lumen.terminate_protocol.item.weapon.IPullbolt;
@@ -38,19 +39,18 @@ public class ClientFireHandler {
         startFire = true;
     }
 
-    public static void doFireTick(ClientPlayerEntity player, ItemStack itemStack, WeaponItem item) {
+    public static void doFireTick(ClientPlayerEntity player, ItemStack stack, WeaponItem item) {
         canFire = false;
 
         long currentTime = System.currentTimeMillis();
         WeaponFireMode fireMode = item.getSettings().getFireMode();
+
         if (currentTime - lastFireTime < lastFireCooldown) {
             if (startFire && fireMode == WeaponFireMode.BOLT) doEndFire(fireMode);
             return;
         }
 
-        final int currentAmmo = itemStack.getDamage();
-        final int maxAmmo = itemStack.getMaxDamage();
-        if (currentAmmo >= maxAmmo) return;
+        if (stack.getDamage() >= stack.getMaxDamage()) return;
         if (getIsPullbolt()) return;
 
         canFire = true;
@@ -75,8 +75,7 @@ public class ClientFireHandler {
         if (!getWasAiming()) spawnMuzzleFlash(player, muzzlePos, lookVec);
 
         // 音效处理
-        boolean lowAmmo = ((float) currentAmmo / maxAmmo) > 0.65f;
-        ISoundRecord fireRecord = item.getStageSound(lowAmmo ? WeaponStage.FIRE_LOW_AMMO : WeaponStage.FIRE);
+        ISoundRecord fireRecord = item.getStageSound(WeaponStage.FIRE, stack);
         if (fireRecord != null) clientPlaySoundRecord(fireRecord, player);
 
         if (fireMode == WeaponFireMode.FULL_AUTOMATIC) return;
@@ -146,13 +145,14 @@ public class ClientFireHandler {
     }
 
     public static void clientPlaySoundRecord(ISoundRecord record, ClientPlayerEntity player) {
-        if (record instanceof SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch)) {
-            player.playSound(sound, volume, pitch);
-            return;
+        switch (record) {
+            case SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch) ->
+                    player.playSound(sound, volume, pitch);
+            case SoundHelper.MultiSound(java.util.List<SoundHelper.SingleSound> sounds) ->
+                    sounds.forEach(singleSound -> player.playSound(singleSound.sound(), singleSound.volume(), singleSound.pitch()));
+            case null, default -> {
+            }
         }
 
-        if (record instanceof SoundHelper.MultiSound(java.util.List<SoundHelper.SingleSound> sounds)) {
-            sounds.forEach(singleSound -> player.playSound(singleSound.sound(), singleSound.volume(), singleSound.pitch()));
-        }
     }
 }

@@ -8,6 +8,7 @@ import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
@@ -39,7 +40,6 @@ public class KraberItem extends WeaponItem implements IPullbolt {
 
     private static final Map<WeaponStage, ISoundRecord> sounds = Map.of(
             WeaponStage.FIRE, SoundHelper.of(TPSoundEvents.KRABER_FIRE),
-            WeaponStage.FIRE_LOW_AMMO, SoundHelper.of(TPSoundEvents.KRABER_FIRE),
             WeaponStage.BOLTBACK, SoundHelper.of(TPSoundEvents.KRABER_BOLTBACK),
             WeaponStage.BOLTFORWARD, SoundHelper.of(TPSoundEvents.KRABER_BOLTFORWARD),
             WeaponStage.MAGIN, SoundHelper.of(TPSoundEvents.KRABER_MAGIN),
@@ -66,8 +66,10 @@ public class KraberItem extends WeaponItem implements IPullbolt {
         return reloadStages.get(reloadTick);
     }
 
-    public ISoundRecord getStageSound(WeaponStage stage) {
+    @Override
+    public ISoundRecord getStageSound(WeaponStage stage, ItemStack stack) {
         if (stage == null) return null;
+        if (stage == WeaponStage.FIRE_LOW_AMMO) return sounds.get(WeaponStage.FIRE);
         return sounds.get(stage);
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -41,16 +42,21 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         return this.weaponSettings;
     }
 
-    public void doFire(World world, PlayerEntity player, ItemStack stack) {
+    public void onFire(World world, ServerPlayerEntity player, ItemStack stack) {
         int currentAmmo = stack.getDamage();
-        int maxAmmo = stack.getMaxDamage();
 
-        if (world.isClient || currentAmmo >= maxAmmo) return;
+        if (world.isClient || currentAmmo >= stack.getMaxDamage()) return;
 
         WeaponCooldownManager manager = ((WeaponCooldownAccessor) player).getWeaponCooldownManager();
+
         if (manager.isCoolingDown(this)) {
-            manager.set(this, 0);
-            stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
+            // interrupt reloading
+            if (stack.getOrDefault(TPComponentTypes.WPN_RELOADING_TYPE, false)) {
+                manager.set(this, 0);
+                stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
+            } else {
+                return;
+            }
         }
 
         stack.setDamage(currentAmmo + 1);
@@ -59,15 +65,15 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         Vec3d muzzlePos = player.getEyePos();
 
         this.raycaster.rayCast((ServerWorld) world, player, muzzlePos, lookVec);
+        manager.set(this, Math.max(1, this.weaponSettings.getFireRate() / 50));
 
-        boolean lowAmmo = ((float) currentAmmo / maxAmmo) > 0.65f;
-        ISoundRecord record = this.getStageSound(lowAmmo ? WeaponStage.FIRE_LOW_AMMO : WeaponStage.FIRE);
+        ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);
         if (record == null) return;
 
         playSoundRecord(record, world, player, player.getPos());
     }
 
-    public void doReload(World world, PlayerEntity player, ItemStack stack) {
+    public void onReload(World world, PlayerEntity player, ItemStack stack) {
         if (world.isClient || stack.getDamage() == 0) return;
         WeaponCooldownManager manager = ((WeaponCooldownAccessor) player).getWeaponCooldownManager();
 
@@ -126,23 +132,25 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         }
 
         if (quickCharge && (stage == WeaponStage.BOLTBACK || stage == WeaponStage.BOLTFORWARD)) return;
-        ISoundRecord record = this.getStageSound(stage);
+        ISoundRecord record = this.getStageSound(stage, stack);
         if (record == null) return;
 
         playSoundRecord(record, world, null, player.getPos());
     }
 
     private static void playSoundRecord(ISoundRecord record, World world, @Nullable PlayerEntity player, Vec3d pos) {
-        if (record instanceof SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch)) {
-            world.playSound(player, pos.x, pos.y, pos.z, sound, SoundCategory.PLAYERS, volume, pitch);
-            return;
+        switch (record) {
+            case SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch) ->
+                    world.playSound(player, pos.x, pos.y, pos.z, sound, SoundCategory.PLAYERS, volume, pitch);
+
+            case SoundHelper.MultiSound(java.util.List<SoundHelper.SingleSound> sounds) ->
+                    sounds.forEach(singleSound -> world.playSound(player,
+                            pos.x, pos.y, pos.z,
+                            singleSound.sound(), SoundCategory.PLAYERS, singleSound.volume(), singleSound.pitch()));
+            case null, default -> {
+            }
         }
 
-        if (record instanceof SoundHelper.MultiSound(java.util.List<SoundHelper.SingleSound> sounds)) {
-            sounds.forEach(singleSound -> world.playSound(player,
-                    pos.x, pos.y, pos.z,
-                    singleSound.sound(), SoundCategory.PLAYERS, singleSound.volume(), singleSound.pitch()));
-        }
     }
 
     @Override

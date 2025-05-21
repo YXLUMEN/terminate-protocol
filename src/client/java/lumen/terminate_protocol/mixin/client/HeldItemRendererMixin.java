@@ -38,8 +38,13 @@ public abstract class HeldItemRendererMixin {
         if (ClientWeaponActionHandler.getWasFiring() && canFire()) {
             Random random = player.getRandom();
 
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(0.8f + (random.nextFloat() - 0.5f) * 0.5f));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((random.nextFloat() - 0.5f) * 0.5f));
+            if (player.isSneaking()) {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(0.4f + (random.nextFloat() - 0.5f) * 0.2f));
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((random.nextFloat() - 0.5f) * 0.2f));
+            } else {
+                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(0.8f + (random.nextFloat() - 0.5f) * 0.5f));
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((random.nextFloat() - 0.5f) * 0.5f));
+            }
         }
 
         if (aiming) {

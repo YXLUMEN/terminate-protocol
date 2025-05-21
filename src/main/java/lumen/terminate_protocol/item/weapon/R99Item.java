@@ -8,6 +8,7 @@ import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 
@@ -37,7 +38,6 @@ public class R99Item extends WeaponItem {
 
     private static final Map<WeaponStage, ISoundRecord> sounds = Map.of(
             WeaponStage.FIRE, SoundHelper.of(TPSoundEvents.R99_FIRE),
-            WeaponStage.FIRE_LOW_AMMO, SoundHelper.of(TPSoundEvents.R99_FIRE_LOW_AMMO, 0.8f),
             WeaponStage.BOLTBACK, SoundHelper.of(TPSoundEvents.R99_BOLTBACK),
             WeaponStage.BOLTFORWARD, SoundHelper.of(TPSoundEvents.R99_BOLTFORWARD),
             WeaponStage.MAGIN, SoundHelper.of(TPSoundEvents.R99_MAGIN),
@@ -60,8 +60,14 @@ public class R99Item extends WeaponItem {
     }
 
     @Override
-    public ISoundRecord getStageSound(WeaponStage stage) {
+    public ISoundRecord getStageSound(WeaponStage stage, ItemStack stack) {
         if (stage == null) return null;
+        if (stage == WeaponStage.FIRE) {
+            float lowAmmo = (float) stack.getDamage() / stack.getMaxDamage();
+            if (lowAmmo >= 0.65f) return SoundHelper.builder()
+                    .add(TPSoundEvents.R99_FIRE_LOW_AMMO, lowAmmo)
+                    .add(TPSoundEvents.R99_FIRE, 0.4f).build();
+        }
         return sounds.get(stage);
     }
 }

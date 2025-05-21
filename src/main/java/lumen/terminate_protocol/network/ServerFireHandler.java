@@ -14,7 +14,7 @@ public class ServerFireHandler {
             ItemStack stack = player.getMainHandStack();
 
             if (stack.getItem() instanceof WeaponItem item) {
-                item.doFire(player.getWorld(), player, stack);
+                item.onFire(player.getWorld(), player, stack);
             }
         }));
 
@@ -23,7 +23,7 @@ public class ServerFireHandler {
             ItemStack stack = player.getMainHandStack();
 
             if (stack.getItem() instanceof WeaponItem item) {
-                item.doReload(player.getWorld(), player, stack);
+                item.onReload(player.getWorld(), player, stack);
             }
         }));
     }
