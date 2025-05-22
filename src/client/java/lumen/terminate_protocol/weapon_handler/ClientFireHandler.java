@@ -1,6 +1,5 @@
 package lumen.terminate_protocol.weapon_handler;
 
-import lumen.terminate_protocol.TPComponentTypes;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
 import lumen.terminate_protocol.item.weapon.IPullbolt;
