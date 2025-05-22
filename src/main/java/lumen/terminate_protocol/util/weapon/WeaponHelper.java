@@ -47,9 +47,7 @@ public class WeaponHelper {
     public static void clientDrawBullet(World world, Vec3d start, Vec3d end) {
         if (!world.isClient) return;
 
-        Vec3d endPos = start.add(end);
-
-        Vec3d velocity = endPos.subtract(start).multiply(0.8f);
+        Vec3d velocity = end.subtract(start).normalize().multiply(60);
         world.addParticle(ParticleTypes.END_ROD, start.x, start.y, start.z, velocity.x, velocity.y, velocity.z);
     }
 

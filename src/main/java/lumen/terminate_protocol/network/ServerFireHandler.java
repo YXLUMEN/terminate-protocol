@@ -1,15 +1,17 @@
 package lumen.terminate_protocol.network;
 
 import lumen.terminate_protocol.item.weapon.WeaponItem;
-import lumen.terminate_protocol.network.packet.GunFireC2SPacket;
-import lumen.terminate_protocol.network.packet.GunReloadC2SPacket;
+import lumen.terminate_protocol.network.packet.WeaponAimC2SPacket;
+import lumen.terminate_protocol.network.packet.WeaponFireC2SPacket;
+import lumen.terminate_protocol.network.packet.WeaponReloadC2SPacket;
+import lumen.terminate_protocol.util.weapon.WeaponAccessor;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ServerFireHandler {
     public static void register() {
-        ServerPlayNetworking.registerGlobalReceiver(GunFireC2SPacket.ID, (payload, context) -> context.player().server.execute(() -> {
+        ServerPlayNetworking.registerGlobalReceiver(WeaponFireC2SPacket.ID, (payload, context) -> context.player().server.execute(() -> {
             ServerPlayerEntity player = context.player();
             ItemStack stack = player.getMainHandStack();
 
@@ -18,7 +20,7 @@ public class ServerFireHandler {
             }
         }));
 
-        ServerPlayNetworking.registerGlobalReceiver(GunReloadC2SPacket.ID, (payload, context) -> context.player().server.execute(() -> {
+        ServerPlayNetworking.registerGlobalReceiver(WeaponReloadC2SPacket.ID, (payload, context) -> context.player().server.execute(() -> {
             ServerPlayerEntity player = context.player();
             ItemStack stack = player.getMainHandStack();
 
@@ -26,5 +28,10 @@ public class ServerFireHandler {
                 item.onReload(player.getWorld(), player, stack);
             }
         }));
+
+        ServerPlayNetworking.registerGlobalReceiver(WeaponAimC2SPacket.ID, (payload, context) -> {
+            boolean aiming = payload.aiming();
+            context.player().server.execute(() -> ((WeaponAccessor) context.player()).setWpnAiming(aiming));
+        });
     }
 }

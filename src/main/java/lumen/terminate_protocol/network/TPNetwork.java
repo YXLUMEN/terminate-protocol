@@ -9,7 +9,8 @@ public class TPNetwork {
         PayloadTypeRegistry.playS2C().register(BatterySoundInterruptS2CPacket.ID, BatterySoundInterruptS2CPacket.CODEC);
         PayloadTypeRegistry.playS2C().register(WeaponFireResultSyncS2CPacket.ID, WeaponFireResultSyncS2CPacket.CODEC);
 
-        PayloadTypeRegistry.playC2S().register(GunFireC2SPacket.ID, GunFireC2SPacket.CODEC);
-        PayloadTypeRegistry.playC2S().register(GunReloadC2SPacket.ID, GunReloadC2SPacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(WeaponFireC2SPacket.ID, WeaponFireC2SPacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(WeaponReloadC2SPacket.ID, WeaponReloadC2SPacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(WeaponAimC2SPacket.ID, WeaponAimC2SPacket.CODEC);
     }
 }

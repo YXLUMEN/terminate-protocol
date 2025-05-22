@@ -8,8 +8,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 public record WeaponFireResultSyncS2CPacket(Vec3d start, Vec3d end, boolean important) implements CustomPayload {
-    public static final Identifier GUN_FIRE_SYNC_ID = Identifier.of(TerminateProtocol.MOD_ID, "gun_fire_sync");
-    public static final Id<WeaponFireResultSyncS2CPacket> ID = new Id<>(GUN_FIRE_SYNC_ID);
+    public static final Identifier WPN_FIRE_SYNC_ID = Identifier.of(TerminateProtocol.MOD_ID, "wpn_fire_sync");
+    public static final Id<WeaponFireResultSyncS2CPacket> ID = new Id<>(WPN_FIRE_SYNC_ID);
     public static final PacketCodec<PacketByteBuf, WeaponFireResultSyncS2CPacket> CODEC = PacketCodec.of((value, buf) -> {
         buf.writeVec3d(value.start);
         buf.writeVec3d(value.end);

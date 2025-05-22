@@ -5,11 +5,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
 
+import static lumen.terminate_protocol.util.weapon.WeaponHelper.clientDrawBullet;
 import static lumen.terminate_protocol.util.weapon.WeaponHelper.clientDrawTrack;
 
 public class ReceiveWeaponActions {
-    private static int drawCooldown = 0;
-
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(WeaponFireResultSyncS2CPacket.ID, (payload, context) -> {
             Vec3d start = payload.start();
@@ -23,10 +22,7 @@ public class ReceiveWeaponActions {
                     clientDrawTrack(world, start, end);
                     return;
                 }
-
-                if (drawCooldown-- > 0) return;
-                drawCooldown = 6;
-                clientDrawTrack(world, start, end);
+                clientDrawBullet(world, start, end);
             });
         });
     }

@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 
+import static lumen.terminate_protocol.weapon_handler.ClientAimHandler.setAim;
 import static lumen.terminate_protocol.weapon_handler.ClientFireHandler.*;
 import static lumen.terminate_protocol.weapon_handler.ClientReloadHandler.startReload;
 
@@ -51,6 +52,7 @@ public class ClientWeaponActionHandler {
             isPullbolt = pullbolt > 0;
         } else isPullbolt = false;
 
+        // 按键控制
         final boolean isFiring = client.options.attackKey.isPressed();
         final boolean isAiming = client.options.useKey.isPressed();
 
@@ -70,7 +72,7 @@ public class ClientWeaponActionHandler {
         if (isAiming != wasAiming) {
             wasAiming = isAiming;
             player.setSprinting(false);
-            AimFovRender.setTargetFOVMultiplier(isAiming ? item.getSettings().getAimFOVMultiplier() : 1.0f);
+            setAim(isAiming, isAiming ? item.getSettings().getAimFOVMultiplier() : 1.0f);
         }
 
         if (TPKeyBind.REGISTER_KEY_BINDING.isPressed()) {

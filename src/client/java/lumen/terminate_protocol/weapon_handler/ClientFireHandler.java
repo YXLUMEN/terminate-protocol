@@ -4,7 +4,7 @@ import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
 import lumen.terminate_protocol.item.weapon.IPullbolt;
 import lumen.terminate_protocol.item.weapon.WeaponItem;
-import lumen.terminate_protocol.network.packet.GunFireC2SPacket;
+import lumen.terminate_protocol.network.packet.WeaponFireC2SPacket;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.WeaponCooldownManager;
@@ -56,7 +56,7 @@ public class ClientFireHandler {
         lastFireTime = currentTime;
         lastFireCooldown = item.getSettings().getFireRate();
 
-        ClientPlayNetworking.send(new GunFireC2SPacket());
+        ClientPlayNetworking.send(new WeaponFireC2SPacket());
 
         Vec3d lookVec = getPlayerLookVec(player);
         Vec3d muzzlePos = getWasAiming() ? player.getEyePos() : getMuzzleOffset(player, lookVec);
@@ -104,8 +104,7 @@ public class ClientFireHandler {
 
     private static void createBulletTrack(ClientPlayerEntity player, Vec3d startPos, boolean fullTrack) {
         World world = player.getWorld();
-
-        Vec3d endPos = startPos.add(player.getRotationVec(1.0f).multiply(fullTrack ? 160 : 64));
+        Vec3d endPos = startPos.add(player.getRotationVec(1.0f).multiply(fullTrack ? 180 : 60));
 
         if (!fullTrack) {
             Vec3d velocity = endPos.subtract(startPos).multiply(0.8f);

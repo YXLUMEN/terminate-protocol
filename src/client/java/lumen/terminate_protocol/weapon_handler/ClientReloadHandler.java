@@ -2,7 +2,7 @@ package lumen.terminate_protocol.weapon_handler;
 
 import lumen.terminate_protocol.TPComponentTypes;
 import lumen.terminate_protocol.item.weapon.WeaponItem;
-import lumen.terminate_protocol.network.packet.GunReloadC2SPacket;
+import lumen.terminate_protocol.network.packet.WeaponReloadC2SPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,6 +20,6 @@ public class ClientReloadHandler {
             return;
         }
 
-        ClientPlayNetworking.send(new GunReloadC2SPacket());
+        ClientPlayNetworking.send(new WeaponReloadC2SPacket());
     }
 }
