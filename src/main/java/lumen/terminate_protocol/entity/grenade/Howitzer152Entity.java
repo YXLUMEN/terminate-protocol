@@ -47,7 +47,7 @@ public class Howitzer152Entity extends AbstractGrenadeEntity {
             Vec3d startPos = this.getPos().add(0, 0.2, 0);
             for (int i = 0; i < FRAG_COUNT; i++) {
                 Vec3d randomDir = getRandomDirection(this.random);
-                RAY_CASTER.rayCast((ServerWorld) world, this, startPos, randomDir);
+                RAY_CASTER.start((ServerWorld) world, this, startPos, randomDir);
             }
         }
 

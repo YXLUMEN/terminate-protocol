@@ -105,15 +105,16 @@ public class ClientFireHandler {
     private static void createBulletTrack(ClientPlayerEntity player, Vec3d startPos, boolean fullTrack) {
         World world = player.getWorld();
         Vec3d endPos = startPos.add(player.getRotationVec(1.0f).multiply(fullTrack ? 180 : 60));
+        Vec3d randomOffset = getRandomDirection(player.getRandom(), 80, 20, 60);
 
         if (!fullTrack) {
-            Vec3d velocity = endPos.subtract(startPos).multiply(0.8f);
+            Vec3d velocity = endPos.subtract(startPos).multiply(0.8f).add(randomOffset);
             world.addParticle(ParticleTypes.END_ROD, startPos.x, startPos.y, startPos.z, velocity.x, velocity.y, velocity.z);
             return;
         }
 
         BlockHitResult blockHit = world.raycast(new RaycastContext(
-                startPos, endPos,
+                startPos, endPos.add(randomOffset),
                 RaycastContext.ShapeType.COLLIDER,
                 RaycastContext.FluidHandling.NONE,
                 player

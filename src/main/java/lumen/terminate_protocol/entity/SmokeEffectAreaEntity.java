@@ -1,5 +1,6 @@
 package lumen.terminate_protocol.entity;
 
+import lumen.terminate_protocol.effect.TPEffects;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.piston.PistonBehavior;
@@ -22,7 +23,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import lumen.terminate_protocol.effect.TPEffects;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -111,7 +111,9 @@ public class SmokeEffectAreaEntity extends Entity {
                 if (!canSmokePassThrough(world, neighbor)) continue;
 
                 float neighborDensity = newDensity.getOrDefault(neighbor, 0.0f);
-                float flux = (currentDensity - neighborDensity) * DIFFUSION_RATE * factor;
+                float gravityFactor = (direction == Direction.DOWN) ? 1.4f : 1.0f;
+                float flux = (currentDensity - neighborDensity) * DIFFUSION_RATE * gravityFactor * factor;
+
                 flux = MathHelper.clamp(flux, 0f, currentDensity);
 
                 newDensity.put(pos, Math.max(newDensity.get(pos) - flux * DIFFUSION_COST_FACTOR, 0.0f));

@@ -1,6 +1,7 @@
 package lumen.terminate_protocol.item.weapon;
 
 import lumen.terminate_protocol.TPComponentTypes;
+import lumen.terminate_protocol.api.ICast;
 import lumen.terminate_protocol.api.WeaponStage;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
@@ -28,13 +29,13 @@ import static lumen.terminate_protocol.util.weapon.WeaponHelper.*;
 
 public abstract class WeaponItem extends Item implements IWeaponSettings {
     private final WeaponSettings weaponSettings;
-    private final TrajectoryRayCaster raycaster;
+    private final ICast caster;
     protected final Random random = Random.create();
 
-    public WeaponItem(Settings settings, WeaponSettings weaponSettings, TrajectoryRayCaster raycaster) {
+    public WeaponItem(Settings settings, WeaponSettings weaponSettings, TrajectoryRayCaster caster) {
         super(settings.maxCount(1));
         this.weaponSettings = weaponSettings;
-        this.raycaster = raycaster;
+        this.caster = caster;
     }
 
     public WeaponSettings getSettings() {
@@ -60,10 +61,11 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
         stack.setDamage(currentAmmo + 1);
 
+        boolean isAiming = ((WeaponAccessor) player).getWpnAiming();
         Vec3d lookVec = getPlayerLookVec(player);
-        Vec3d muzzlePos = ((WeaponAccessor) player).getWpnAiming() ? player.getEyePos() : getMuzzleOffset(player, lookVec);
+        Vec3d muzzlePos = isAiming ? player.getEyePos() : getMuzzleOffset(player, lookVec);
 
-        this.raycaster.rayCast((ServerWorld) world, player, muzzlePos, lookVec);
+        this.caster.start((ServerWorld) world, player, muzzlePos, lookVec);
         manager.set(this, Math.max(1, this.weaponSettings.getFireRate() / 50));
 
         ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);

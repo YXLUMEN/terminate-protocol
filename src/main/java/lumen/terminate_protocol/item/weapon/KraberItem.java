@@ -24,10 +24,11 @@ public class KraberItem extends WeaponItem implements IPullbolt {
                 new TrajectoryRayCaster()
                         .showTrack(true)
                         .isImportant(true)
-                        .baseDamage(30)
+                        .baseDamage(40)
                         .baseRayLength(160)
                         .bounceChance(0.2f)
                         .healthBaseDamage(0.3f)
+                        .seriousInjury(true)
                         .setDamageType(TPDamageTypes.SNIPER_BULLET_HIT));
     }
 

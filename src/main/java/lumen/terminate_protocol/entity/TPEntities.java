@@ -57,6 +57,14 @@ public class TPEntities {
                     .trackingTickInterval(10)
     );
 
+    public static final EntityType<HomingMissileEntity> HOMING_MISSILE_ENTITY = register(
+            "homing_missile",
+            EntityType.Builder.<HomingMissileEntity>create(HomingMissileEntity::new, SpawnGroup.MISC)
+                    .dimensions(1.0f, 1.0f)
+                    .maxTrackingRange(4)
+                    .trackingTickInterval(10)
+    );
+
     private static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
         return Registry.register(Registries.ENTITY_TYPE, Identifier.of(TerminateProtocol.MOD_ID, id), builder.build());
     }

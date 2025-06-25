@@ -21,6 +21,7 @@ public class TPItemsGroup {
                             entries.add(R99);
                             entries.add(SPITFIRE);
                             entries.add(KRABER);
+                            entries.add(ROCKET_LAUNCHER);
 
                             entries.add(FRAG_GRENADE);
                             entries.add(SMOKE_GRENADE);
@@ -36,6 +37,7 @@ public class TPItemsGroup {
                             entries.add(ENERGY_AMMO);
                             entries.add(SHRAPNEL_AMMO);
                             entries.add(SNIPER_AMMO);
+                            entries.add(ROCKET_AMMO);
                         })
                         .build()
         );

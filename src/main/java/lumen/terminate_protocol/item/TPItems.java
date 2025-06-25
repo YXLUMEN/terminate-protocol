@@ -4,6 +4,7 @@ import lumen.terminate_protocol.TerminateProtocol;
 import lumen.terminate_protocol.item.grenade.*;
 import lumen.terminate_protocol.item.weapon.KraberItem;
 import lumen.terminate_protocol.item.weapon.R99Item;
+import lumen.terminate_protocol.item.weapon.RocketLauncherItem;
 import lumen.terminate_protocol.item.weapon.SpitfireItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -28,10 +29,13 @@ public class TPItems {
     public static final Item ENERGY_AMMO = register("energy_ammo", new AmmoItem(new Item.Settings().maxCount(86)));
     public static final Item SHRAPNEL_AMMO = register("shrapnel_ammo", new AmmoItem(new Item.Settings().maxCount(80)));
     public static final Item SNIPER_AMMO = register("sniper_ammo", new AmmoItem(new Item.Settings().maxCount(72)));
+    public static final Item ROCKET_AMMO = register("rocket_ammo", new AmmoItem(new Item.Settings().maxCount(16)));
 
     public static final Item KRABER = register("kraber", new KraberItem(new Item.Settings()));
     public static final Item R99 = register("r99", new R99Item(new Item.Settings()));
     public static final Item SPITFIRE = register("spitfire", new SpitfireItem(new Item.Settings()));
+
+    public static final Item ROCKET_LAUNCHER = register("rocket_launcher", new RocketLauncherItem(new Item.Settings()));
 
     public static <T extends Item> T register(String id, T item) {
         return Registry.register(Registries.ITEM, Identifier.of(TerminateProtocol.MOD_ID, id), item);

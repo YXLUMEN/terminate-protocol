@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(GameOptions.class)
+@Mixin(value = GameOptions.class, priority = 800)
 public abstract class GameOptionsMixin {
     @Unique
     private double originValue = 0;
@@ -19,10 +19,11 @@ public abstract class GameOptionsMixin {
         if (AimFovRender.getFovMultiplier() <= 0.3f) {
             var originSensitivity = cir.getReturnValue();
             if (originValue == 0) originValue = originSensitivity.getValue();
-            originSensitivity.setValue(originValue * 0.3);
+            originSensitivity.setValue(originValue * AimFovRender.getFovMultiplier());
             cir.setReturnValue(originSensitivity);
             return;
         }
+
         if (originValue != 0) {
             var originSensitivity = cir.getReturnValue();
             originSensitivity.setValue(originValue);

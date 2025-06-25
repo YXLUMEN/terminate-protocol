@@ -80,11 +80,22 @@ public class WeaponHelper {
         double radius = Math.sqrt(1 - y * y);
         double theta = random.nextDouble() * (2 * Math.PI);
 
-        return new Vec3d(
-                Math.cos(theta) * radius,
-                y,
-                Math.sin(theta) * radius
-        ).normalize();
+        return new Vec3d(Math.cos(theta) * radius, y, Math.sin(theta) * radius).normalize();
+    }
+
+    public static Vec3d getRandomDirection(Random random, float maxPitchAngle, float minYaw, float maxYaw) {
+        // 限制 Y 分量（垂直角度）
+        double minY = Math.cos(Math.toRadians(maxPitchAngle));
+        double y = minY + (1 - minY) * random.nextDouble();
+        y = Math.min(Math.max(y, -1), 1);
+
+        // 计算水平半径
+        double radius = Math.sqrt(1 - y * y);
+
+        // 限制水平角度
+        double theta = Math.toRadians(minYaw + random.nextDouble() * (maxYaw - minYaw));
+
+        return new Vec3d(Math.cos(theta) * radius, y, Math.sin(theta) * radius).normalize();
     }
 
     public static Vec3d getPlayerLookVec(PlayerEntity player) {

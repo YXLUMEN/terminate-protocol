@@ -16,6 +16,10 @@ public class TPEffects {
             Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(TerminateProtocol.MOD_ID, "smoke_cloak"),
                     new SmokeCloak());
 
+    public static final RegistryEntry<StatusEffect> SERIOUS_INJURY =
+            Registry.registerReference(Registries.STATUS_EFFECT, Identifier.of(TerminateProtocol.MOD_ID, "serious_injury"),
+                    new SeriousInjury());
+
     public static void registerEffects() {
     }
 }
