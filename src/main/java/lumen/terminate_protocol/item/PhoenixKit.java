@@ -1,9 +1,10 @@
 package lumen.terminate_protocol.item;
 
+import lumen.terminate_protocol.api.EntityShieldAccessor;
+import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
+import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -17,16 +18,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
-import lumen.terminate_protocol.sound.TPSoundEvents;
 
 import java.util.Iterator;
 
+import static lumen.terminate_protocol.item.Battery.MAX_SHIELD;
 import static lumen.terminate_protocol.item.Battery.spawnChargingParticles;
 
 
 public class PhoenixKit extends Item {
-    private static final int MAX_SHIELD = 20;
     private static final int BASE_COOLDOWN_TICKS = 20;
     private static final int CHARGE_TIME = 200;
 
@@ -38,11 +37,11 @@ public class PhoenixKit extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
 
-        if (user.getAbsorptionAmount() >= MAX_SHIELD && user.getHealth() >= user.getMaxHealth()) {
+        if (user.getItemCooldownManager().isCoolingDown(this)) {
             return TypedActionResult.fail(itemStack);
         }
 
-        if (user.getItemCooldownManager().isCoolingDown(this)) {
+        if (((EntityShieldAccessor) user).terminate_protocol$getShieldAmount() >= MAX_SHIELD && user.getHealth() >= user.getMaxHealth()) {
             return TypedActionResult.fail(itemStack);
         }
 
@@ -71,21 +70,15 @@ public class PhoenixKit extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if (!world.isClient) {
+        if (user instanceof PlayerEntity) {
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     TPSoundEvents.BATTERY_CHARGE_FINISH_ENERGY, SoundCategory.PLAYERS);
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     TPSoundEvents.BATTERY_CHARGE_FINISH_MEC, SoundCategory.PLAYERS);
 
-
-            EntityAttributeInstance absorption = user.getAttributeInstance(EntityAttributes.GENERIC_MAX_ABSORPTION);
-            if (absorption != null) {
-                absorption.setBaseValue(MAX_SHIELD);
-                user.setAbsorptionAmount(MAX_SHIELD);
-            } else {
-                user.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION,
-                        -1, 5, false, false, false));
-            }
+            var shield = ((EntityShieldAccessor) user);
+            shield.terminate_protocol$setMaxShieldAmount(MAX_SHIELD);
+            shield.terminate_protocol$setShieldAmount(MAX_SHIELD);
 
             user.setHealth(user.getMaxHealth());
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,

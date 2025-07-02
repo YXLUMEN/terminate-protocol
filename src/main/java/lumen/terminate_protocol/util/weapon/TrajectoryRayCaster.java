@@ -2,7 +2,7 @@ package lumen.terminate_protocol.util.weapon;
 
 import lumen.terminate_protocol.api.HitBoxType;
 import lumen.terminate_protocol.api.ICast;
-import lumen.terminate_protocol.damage_type.TPDamageTypes;
+import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.effect.TPEffects;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -37,7 +37,7 @@ public class TrajectoryRayCaster implements ICast {
     private boolean important = false;
 
     private float damage = 0.0f;
-    private short maxHit = 1;
+    private short maxHit = 2;
     private float hardThreshold = 1.0f;
     private float bounceChance = 1.0f;
     private int baseRayLength = 32;
@@ -47,7 +47,6 @@ public class TrajectoryRayCaster implements ICast {
     private float bounceRandomVariation = 0.2f;
     private float penetrateChance = 1.0f;
     private float bouncePositionOffset = 0.1f;
-    private float penetrationPositionOffset = 0.3f;
     private float healthBaseDamage = 0.0f;
     private boolean seriousInjury = false;
 
@@ -124,11 +123,6 @@ public class TrajectoryRayCaster implements ICast {
         return this;
     }
 
-    public TrajectoryRayCaster penetrationPositionOffset(float offset) {
-        this.penetrationPositionOffset = offset;
-        return this;
-    }
-
     public TrajectoryRayCaster healthBaseDamage(float percentage) {
         this.healthBaseDamage = percentage;
         return this;
@@ -139,7 +133,7 @@ public class TrajectoryRayCaster implements ICast {
         return this;
     }
 
-    public void start(ServerWorld world, Entity attacker, Vec3d start, Vec3d dir) {
+    public void start(World world, Entity attacker, Vec3d start, Vec3d dir) {
         Random random = world.random;
 
         Vec3d currentPos = new Vec3d(start.x, start.y, start.z);
@@ -189,23 +183,27 @@ public class TrajectoryRayCaster implements ICast {
             Direction face = blockHit.getSide();
             final Vec3d normal = new Vec3d(face.getOffsetX(), face.getOffsetY(), face.getOffsetZ()).normalize();
 
-            if (showTrack) syncTrack(attacker, currentPos, endPos, important);
+            if (showTrack) syncTrack(attacker, currentPos, blockHit.getPos(), important);
             if (shouldBounce(currentDir, normal, hardness, remainingDamage, random)) {
                 currentDir = calculateReflection(currentDir, normal, random).normalize();
                 currentPos = blockHit.getPos().add(currentDir.multiply(bouncePositionOffset));
                 remainingDamage *= (1 - bounceDamageLoss);
 
-                world.spawnParticles(ParticleTypes.SMOKE,
-                        currentPos.x, currentPos.y, currentPos.z, 1, 0, 0, 0, 0);
+                if (world instanceof ServerWorld serverWorld) {
+                    serverWorld.spawnParticles(ParticleTypes.SMOKE,
+                            currentPos.x, currentPos.y, currentPos.z, 1, 0, 0, 0, 0);
+                }
 
             } else if (tryPenetrate(hardness, remainingDamage, random)) {
                 // 穿透
-                currentPos = blockHit.getPos().add(currentDir.multiply(penetrationPositionOffset));
+                currentPos = blockHit.getPos().add(currentDir);
                 remainingDamage *= Math.max(0.3f, 1 - (hardness * 0.2f));
                 if (entityHit != null) handleDamage(world, attacker, entityHit, remainingDamage);
 
-                world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState),
-                        currentPos.x, currentPos.y, currentPos.z, 4, 0, 0, 0, 0.01);
+                if (world instanceof ServerWorld serverWorld) {
+                    serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState),
+                            currentPos.x, currentPos.y, currentPos.z, 4, 0, 0, 0, 0.01);
+                }
 
             } else break;
         }
@@ -243,34 +241,34 @@ public class TrajectoryRayCaster implements ICast {
 
     private void handleDamage(World world, Entity attacker, EntityHitResult hitResult, float damage) {
         Entity target = hitResult.getEntity();
-        target.damage(world.getDamageSources().create(this.damageType, attacker), damage);
 
-        if (!(target instanceof LivingEntity living)) return;
+        if (!(target instanceof LivingEntity living)) {
+            target.damage(world.getDamageSources().create(this.damageType, attacker), damage);
+            return;
+        }
 
         living.hurtTime = 0;
         living.timeUntilRegen = 0;
 
-        float percentageDamage = living.getMaxHealth() * this.healthBaseDamage;
+        float percentageDamage = damage + (living.getMaxHealth() * this.healthBaseDamage);
 
         if (living instanceof PlayerEntity player) {
+            // 简单部位判断
             HitBoxType hitBox = PreciseHitHelper.getHitBox(player, hitResult.getPos());
 
             float partDamageFactor = DAMAGE_MULTIPLIERS.getOrDefault(hitBox, 1.0f);
-            float finalDamage = damage * partDamageFactor + percentageDamage;
+            float finalDamage = partDamageFactor * percentageDamage;
 
             player.damage(world.getDamageSources().create(this.damageType, attacker), finalDamage);
             return;
         }
 
-        if (living.hasStatusEffect(TPEffects.SERIOUS_INJURY)) {
-            living.setHealth(living.getHealth() - percentageDamage);
-            return;
+        if (this.seriousInjury) {
+            living.addStatusEffect(new StatusEffectInstance(
+                    TPEffects.SERIOUS_INJURY, 200, 0, true, true
+            ));
         }
 
-        boolean result = living.damage(world.getDamageSources().create(this.damageType, attacker), percentageDamage);
-
-        if (result) living.addStatusEffect(new StatusEffectInstance(
-                TPEffects.SERIOUS_INJURY, 200, 0, true, true
-        ));
+        living.damage(world.getDamageSources().create(this.damageType, attacker), percentageDamage);
     }
 }

@@ -2,7 +2,7 @@ package lumen.terminate_protocol.item.weapon;
 
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
-import lumen.terminate_protocol.damage_type.TPDamageTypes;
+import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KraberItem extends WeaponItem implements IPullbolt {
     public KraberItem(Settings settings) {
         super(settings.maxDamage(6),
-                new WeaponSettings(1800, 60, TPItems.SNIPER_AMMO, WeaponFireMode.BOLT)
+                new WeaponSettings(36, 80, TPItems.SNIPER_AMMO, WeaponFireMode.BOLT)
                         .setAimFovMultiplier(0.1f)
                         .setRecoilDecayMultiplier(0.95f)
                         .setAimOffset(new Vec3d(-0.5112f, 0.0073f, -0.2f)),
@@ -25,7 +25,7 @@ public class KraberItem extends WeaponItem implements IPullbolt {
                         .showTrack(true)
                         .isImportant(true)
                         .baseDamage(40)
-                        .baseRayLength(160)
+                        .baseRayLength(200)
                         .bounceChance(0.2f)
                         .healthBaseDamage(0.3f)
                         .seriousInjury(true)
@@ -33,9 +33,9 @@ public class KraberItem extends WeaponItem implements IPullbolt {
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
-            55, WeaponStage.MAGOUT,
-            32, WeaponStage.MAGIN,
-            11, WeaponStage.BOLTBACK,
+            75, WeaponStage.MAGOUT,
+            50, WeaponStage.MAGIN,
+            18, WeaponStage.BOLTBACK,
             0, WeaponStage.BOLTFORWARD
     );
 

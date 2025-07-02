@@ -6,7 +6,10 @@ import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -33,18 +36,23 @@ public class FragGrenadeEntity extends AbstractGrenadeEntity {
     protected void explode() {
         World world = this.getWorld();
 
-        if (!world.isClient) {
-            world.createExplosion(this,
+        if (world instanceof ServerWorld serverWorld) {
+            serverWorld.createExplosion(this,
                     this.getX(), this.getY(), this.getZ(),
                     POWER,
                     false,
                     World.ExplosionSourceType.NONE
             );
 
+            serverWorld.playSound(null, getBlockPos(),
+                    SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            serverWorld.spawnParticles(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(),
+                    1, 0, 0, 0, 0);
+
             Vec3d startPos = this.getPos().add(0, 0.5, 0);
             for (int i = 0; i < FRAG_COUNT; i++) {
                 Vec3d randomDir = getRandomDirection(this.random);
-                RAY_CASTER.start((ServerWorld) world, this, startPos, randomDir);
+                RAY_CASTER.start(world, this, startPos, randomDir);
             }
         }
 

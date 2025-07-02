@@ -1,8 +1,8 @@
 package lumen.terminate_protocol.item.weapon;
 
+import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
-import lumen.terminate_protocol.damage_type.TPDamageTypes;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
@@ -17,22 +17,22 @@ import java.util.Map;
 public class SpitfireItem extends WeaponItem {
     public SpitfireItem(Settings settings) {
         super(settings.maxDamage(80),
-                new WeaponSettings(80, 60, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
+                new WeaponSettings(2, 65, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
                         .setAimOffset(new Vec3d(-0.513f, 0.05f, 0))
                         .setAimFovMultiplier(0.7f)
                         .setRecoilDecayMultiplier(0.4f),
                 new TrajectoryRayCaster()
                         .showTrack(true)
                         .baseDamage(5)
-                        .baseRayLength(64)
+                        .baseRayLength(100)
                         .penetrateChance(0.5f)
                         .bounceChance(0.2f)
                         .setDamageType(TPDamageTypes.HEAVY_BULLET_HIT));
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
-            55, WeaponStage.MAGOUT,
-            28, WeaponStage.MAGIN,
+            60, WeaponStage.MAGOUT,
+            33, WeaponStage.MAGIN,
             19, WeaponStage.MAGPAT,
             8, WeaponStage.BOLTBACK,
             0, WeaponStage.BOLTFORWARD

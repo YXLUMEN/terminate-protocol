@@ -2,11 +2,12 @@ package lumen.terminate_protocol.item.weapon;
 
 import lumen.terminate_protocol.TPComponentTypes;
 import lumen.terminate_protocol.api.ICast;
+import lumen.terminate_protocol.api.WeaponAccessor;
 import lumen.terminate_protocol.api.WeaponStage;
+import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
-import lumen.terminate_protocol.util.weapon.WeaponAccessor;
 import lumen.terminate_protocol.util.weapon.WeaponCooldownManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -15,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
@@ -47,7 +47,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
         if (world.isClient || currentAmmo >= stack.getMaxDamage()) return;
 
-        WeaponCooldownManager manager = ((WeaponAccessor) player).getWpnCooldownManager();
+        WeaponCooldownManager manager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
         if (manager.isCoolingDown(this)) {
             // interrupt reloading
@@ -61,12 +61,12 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
         stack.setDamage(currentAmmo + 1);
 
-        boolean isAiming = ((WeaponAccessor) player).getWpnAiming();
+        boolean isAiming = ((WeaponAccessor) player).terminate_protocol$getWpnAiming();
         Vec3d lookVec = getPlayerLookVec(player);
         Vec3d muzzlePos = isAiming ? player.getEyePos() : getMuzzleOffset(player, lookVec);
 
-        this.caster.start((ServerWorld) world, player, muzzlePos, lookVec);
-        manager.set(this, Math.max(1, this.weaponSettings.getFireRate() / 50));
+        this.caster.start(world, player, muzzlePos, lookVec);
+        manager.set(this, Math.max(0, this.weaponSettings.getFireRate()));
 
         ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);
         if (record == null) return;
@@ -76,7 +76,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
     public void onReload(World world, PlayerEntity player, ItemStack stack) {
         if (world.isClient || stack.getDamage() == 0) return;
-        WeaponCooldownManager manager = ((WeaponAccessor) player).getWpnCooldownManager();
+        WeaponCooldownManager manager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
         if (manager.isCoolingDown(this)) return;
 
@@ -86,9 +86,9 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
     private void restoreAmmo(ItemStack stack, PlayerEntity player) {
         stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
-        ((WeaponAccessor) player).getWpnCooldownManager().set(this, 0);
+        ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager().set(this, 0);
 
-        if (player.isCreative()) {
+        if (player.isCreative() || findItemSlot(player, TPItems.DEBUG_AMMO) != -1) {
             stack.setDamage(0);
             return;
         }
@@ -114,7 +114,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
     }
 
     private void reloadAction(World world, PlayerEntity player, ItemStack stack, boolean selected) {
-        WeaponCooldownManager manager = ((WeaponAccessor) player).getWpnCooldownManager();
+        WeaponCooldownManager manager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
         if (!selected) {
             manager.set(this, 0);

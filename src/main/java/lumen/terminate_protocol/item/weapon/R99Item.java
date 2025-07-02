@@ -1,8 +1,8 @@
 package lumen.terminate_protocol.item.weapon;
 
+import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
-import lumen.terminate_protocol.damage_type.TPDamageTypes;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
@@ -17,22 +17,22 @@ import java.util.Map;
 public class R99Item extends WeaponItem {
     public R99Item(Settings settings) {
         super(settings.maxDamage(40),
-                new WeaponSettings(20, 32, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
+                new WeaponSettings(0, 36, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
                         .setAimOffset(new Vec3d(-0.514f, 0.15, 0))
                         .setAimFovMultiplier(0.8f)
                         .setRecoilDecayMultiplier(0.3f),
                 new TrajectoryRayCaster()
                         .showTrack(true)
                         .baseDamage(2)
-                        .baseRayLength(32)
+                        .baseRayLength(50)
                         .bounceChance(0.2f)
                         .setDamageType(TPDamageTypes.LIGHT_BULLET_HIT));
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
-            30, WeaponStage.MAGOUT,
+            34, WeaponStage.MAGOUT,
             20, WeaponStage.MAGIN,
-            6, WeaponStage.BOLTBACK,
+            8, WeaponStage.BOLTBACK,
             0, WeaponStage.BOLTFORWARD
     );
 

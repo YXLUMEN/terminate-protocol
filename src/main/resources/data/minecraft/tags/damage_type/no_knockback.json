@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "terminate-protocol:fragment_hit",
+    "terminate-protocol:heavy_bullet",
+    "terminate-protocol:light_bullet",
+    "terminate-protocol:sniper_bullet"
+  ]
+}

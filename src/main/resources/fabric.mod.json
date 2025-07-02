@@ -19,18 +19,14 @@
 			"lumen.terminate_protocol.TerminateProtocol"
 		],
 		"client": [
-          "lumen.terminate_protocol.TerminateProtocolClient"
+			"lumen.terminate_protocol.client.TerminateProtocolClient"
 		],
 		"fabric-datagen": [
-          "lumen.terminate_protocol.TerminateProtocolDataGenerator"
+			"lumen.terminate_protocol.TerminateProtocolDataGenerator"
 		]
 	},
 	"mixins": [
-		"terminate-protocol.mixins.json",
-		{
-			"config": "terminate-protocol.client.mixins.json",
-			"environment": "client"
-		}
+		"terminate-protocol.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",

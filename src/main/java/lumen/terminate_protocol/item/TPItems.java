@@ -30,6 +30,7 @@ public class TPItems {
     public static final Item SHRAPNEL_AMMO = register("shrapnel_ammo", new AmmoItem(new Item.Settings().maxCount(80)));
     public static final Item SNIPER_AMMO = register("sniper_ammo", new AmmoItem(new Item.Settings().maxCount(72)));
     public static final Item ROCKET_AMMO = register("rocket_ammo", new AmmoItem(new Item.Settings().maxCount(16)));
+    public static final Item DEBUG_AMMO = register("debug_ammo", new AmmoItem(new Item.Settings().maxCount(1)));
 
     public static final Item KRABER = register("kraber", new KraberItem(new Item.Settings()));
     public static final Item R99 = register("r99", new R99Item(new Item.Settings()));

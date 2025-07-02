@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class AbstractGrenadeEntity extends ThrownItemEntity {
-    private static final TrackedData<Integer> FUSE = DataTracker.registerData(AbstractGrenadeEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Integer> FUSE = DataTracker.registerData(AbstractGrenadeEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private boolean fusing = true;
 
     private short bounceCount = 0;

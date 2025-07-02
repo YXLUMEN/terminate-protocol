@@ -1,14 +1,11 @@
 package lumen.terminate_protocol.item;
 
 
+import lumen.terminate_protocol.api.EntityShieldAccessor;
 import lumen.terminate_protocol.network.packet.BatterySoundInterruptS2CPacket;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,7 +20,7 @@ import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class Battery extends Item {
-    private static final int MAX_SHIELD = 20;
+    public static final int MAX_SHIELD = 20;
     private static final int BASE_COOLDOWN_TICKS = 15;
 
     private final int shield;
@@ -39,11 +36,11 @@ public class Battery extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
 
-        if (user.getAbsorptionAmount() >= MAX_SHIELD) {
+        if (user.getItemCooldownManager().isCoolingDown(this)) {
             return TypedActionResult.fail(itemStack);
         }
 
-        if (user.getItemCooldownManager().isCoolingDown(this)) {
+        if (((EntityShieldAccessor) user).terminate_protocol$getShieldAmount() >= MAX_SHIELD) {
             return TypedActionResult.fail(itemStack);
         }
 
@@ -73,24 +70,16 @@ public class Battery extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if (!world.isClient) {
+        if (user instanceof PlayerEntity) {
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     TPSoundEvents.BATTERY_CHARGE_FINISH_ENERGY, SoundCategory.PLAYERS);
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     TPSoundEvents.BATTERY_CHARGE_FINISH_MEC, SoundCategory.PLAYERS);
 
-
-            EntityAttributeInstance absorption = user.getAttributeInstance(EntityAttributes.GENERIC_MAX_ABSORPTION);
-            if (absorption != null) {
-                float shieldCount = Math.min(MAX_SHIELD, user.getAbsorptionAmount() + this.shield);
-                absorption.setBaseValue(shieldCount);
-                user.setAbsorptionAmount(shieldCount);
-            } else {
-                user.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION,
-                        -1, this.shield >= 20 ? 5 : 2, false, false, false));
-            }
-            user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,
-                    600, 1, false, false, false));
+            var shield = ((EntityShieldAccessor) user);
+            float shieldCount = Math.min(MAX_SHIELD, shield.terminate_protocol$getShieldAmount() + this.shield);
+            shield.terminate_protocol$setMaxShieldAmount(shieldCount);
+            shield.terminate_protocol$setShieldAmount(shieldCount);
 
             if (user instanceof PlayerEntity player) player.getItemCooldownManager().set(this, BASE_COOLDOWN_TICKS);
         }

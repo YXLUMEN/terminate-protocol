@@ -18,10 +18,10 @@ import net.minecraft.world.World;
 
 public class WeaponHelper {
     public static void syncTrack(Entity attacker, Vec3d start, Vec3d end, boolean important) {
-        if (!attacker.isPlayer()) return;
+        if (!attacker.isPlayer() || attacker.getWorld().isClient) return;
         var payload = new WeaponFireResultSyncS2CPacket(start, end, important);
-        for (ServerPlayerEntity player : PlayerLookup.tracking(attacker)) {
-            if (player == null || player.equals(attacker)) continue;
+        for (ServerPlayerEntity player : PlayerLookup.tracking((ServerWorld) attacker.getWorld(), attacker.getChunkPos())) {
+            if (player == null) continue;
             ServerPlayNetworking.send(player, payload);
         }
     }
@@ -50,7 +50,7 @@ public class WeaponHelper {
         Vec3d velocity = end.subtract(start).normalize().multiply(60);
         world.addParticle(ParticleTypes.END_ROD, start.x, start.y, start.z, velocity.x, velocity.y, velocity.z);
     }
-
+    /*
     public static void debugDrawRay(World world, Vec3d start, Vec3d end, SimpleParticleType particleType, int amplifier) {
         if (world.isClient) return;
 
@@ -73,7 +73,7 @@ public class WeaponHelper {
                     0
             );
         }
-    }
+    }*/
 
     public static Vec3d getRandomDirection(Random random) {
         double y = 1 - (random.nextDouble() * 2);

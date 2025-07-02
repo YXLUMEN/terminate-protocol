@@ -55,8 +55,14 @@ public class FlashGrenadeEntity extends AbstractGrenadeEntity {
         ServerWorld world = (ServerWorld) this.getWorld();
 
         Vec3d flashPos = this.getPos().add(0, this.getHeight() / 2, 0);
+
         world.spawnParticles(ParticleTypes.END_ROD, flashPos.x, flashPos.y + 1, flashPos.z,
                 10, 0.2, 0.2, 0.2, 0.05);
+        world.spawnParticles(ParticleTypes.FLASH, flashPos.x, flashPos.y + 0.5, flashPos.z,
+                1, 0, 0, 0, 0);
+
+        world.playSound(null, getBlockPos(),
+                SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.BLOCKS, 1.0f, 1.0f);
         world.playSound(null, getBlockPos(),
                 SoundEvents.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.5f);
 
@@ -118,11 +124,16 @@ public class FlashGrenadeEntity extends AbstractGrenadeEntity {
         float distanceFactor = (float) Math.pow(1 - entity.getPos().distanceTo(flashPos) / FLASH_RANGE, 0.4);
 
         // 计算角度因子
-        Vec3d toFlash = flashPos.subtract(entity.getEyePos()).normalize();
-        Vec3d lookVec = entity.getRotationVec(1.0f);
-        float angle = (float) Math.toDegrees(Math.acos(lookVec.dotProduct(toFlash)));
-        float angleFactor = 1f - Math.min(1, angle / MAX_ANGLE);
-        if (angleFactor == 0) return 0;
+        float angleFactor;
+        if (entity.isPlayer()) {
+            Vec3d toFlash = flashPos.subtract(entity.getEyePos()).normalize();
+            Vec3d lookVec = entity.getRotationVec(1.0f);
+            float angle = (float) Math.toDegrees(Math.acos(lookVec.dotProduct(toFlash)));
+            angleFactor = 1f - Math.min(1, angle / MAX_ANGLE);
+            if (angleFactor == 0) return 0;
+        } else {
+            angleFactor = 1.0f;
+        }
 
         // 墙体阻挡因子
         float blockFactor = isBlocked(world, flashPos, entity) ? 0.1f : 1f;

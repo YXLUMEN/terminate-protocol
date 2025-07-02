@@ -1,13 +1,13 @@
-// 1.21.1	2025-05-15T19:48:47.0175262	terminate-protocol/Recipes
+// 1.21.1	2025-06-26T15:25:17.5426962	terminate-protocol/Recipes
 2a19f5ea903855b9a0bd0d0907061327fb082b36 data\terminate-protocol\recipe\flash_grenade.json
 e7f231f90b61bbbd6c6f25370a23ff061e703834 data\terminate-protocol\advancement\recipes\combat\med_kit.json
 93ff0a291eeb2855fa03233287bbd17e1a0a8a9e data\terminate-protocol\advancement\recipes\combat\light_ammo.json
 a1b93d3bd6514a1e3f1b5d3cdbc0a42ac5e47983 data\terminate-protocol\recipe\light_ammo.json
 3cfa94143e6fd34d812447134931479edf69288d data\terminate-protocol\advancement\recipes\combat\flash_grenade.json
-aa082ae270083b05a94130fe42a75918d0afe2ec data\terminate-protocol\advancement\recipes\combat\incendiary_grenade.json
 f996a6f3483b6e9f8b3b392ba29f3468a2296a6a data\terminate-protocol\recipe\sniper_ammo.json
-58367f8b1b8000c1a9e7d3a918360459f53c9d1f data\terminate-protocol\recipe\incendiary_grenade.json
+aa082ae270083b05a94130fe42a75918d0afe2ec data\terminate-protocol\advancement\recipes\combat\incendiary_grenade.json
 e977d208b5cbc4966697aa5805fc031957d25273 data\terminate-protocol\advancement\recipes\combat\battery.json
+58367f8b1b8000c1a9e7d3a918360459f53c9d1f data\terminate-protocol\recipe\incendiary_grenade.json
 523ec41cb0837d0048ae1550563b9c37922e7216 data\terminate-protocol\recipe\battery.json
 dd7ebf971a7264bae6e4dfb2734b76a7ecece50d data\terminate-protocol\recipe\frag_grenade.json
 45c7dcd3d1e559fb360bba51fc57788a5eb4c5d2 data\terminate-protocol\advancement\recipes\combat\smoke_grenade.json
