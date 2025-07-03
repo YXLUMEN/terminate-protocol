@@ -19,8 +19,6 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
-
 import static lumen.terminate_protocol.item.Battery.MAX_SHIELD;
 import static lumen.terminate_protocol.item.Battery.spawnChargingParticles;
 
@@ -70,7 +68,7 @@ public class PhoenixKit extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        if (user instanceof PlayerEntity) {
+        if (user instanceof PlayerEntity player) {
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
                     TPSoundEvents.BATTERY_CHARGE_FINISH_ENERGY, SoundCategory.PLAYERS);
             world.playSound(null, user.getX(), user.getY(), user.getZ(),
@@ -84,18 +82,14 @@ public class PhoenixKit extends Item {
             user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,
                     600, 1, false, false, false));
 
-            if (user instanceof PlayerEntity player) {
-                player.getHungerManager().add(20, 2);
-                player.getItemCooldownManager().set(this, BASE_COOLDOWN_TICKS);
-                player.clearStatusEffects();
+            player.getHungerManager().add(20, 2);
+            player.getItemCooldownManager().set(this, BASE_COOLDOWN_TICKS);
 
-                Iterator<StatusEffectInstance> iterator = player.getActiveStatusEffects().values().iterator();
-
-                while (iterator.hasNext()) {
-                    var type = iterator.next().getEffectType();
+            if (!world.isClient) {
+                for (StatusEffectInstance statusEffectInstance : player.getActiveStatusEffects().values()) {
+                    var type = statusEffectInstance.getEffectType();
                     if (type.value().getCategory() == StatusEffectCategory.BENEFICIAL) continue;
                     player.removeStatusEffect(type);
-                    iterator.remove();
                 }
             }
         }

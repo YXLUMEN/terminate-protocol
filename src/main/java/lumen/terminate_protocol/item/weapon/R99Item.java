@@ -16,16 +16,17 @@ import java.util.Map;
 
 public class R99Item extends WeaponItem {
     public R99Item(Settings settings) {
-        super(settings.maxDamage(40),
+        super(settings.maxDamage(46),
                 new WeaponSettings(0, 36, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
                         .setAimOffset(new Vec3d(-0.514f, 0.15, 0))
                         .setAimFovMultiplier(0.8f)
                         .setRecoilDecayMultiplier(0.3f),
                 new TrajectoryRayCaster()
                         .showTrack(true)
-                        .baseDamage(2)
+                        .baseDamage(3)
                         .baseRayLength(50)
-                        .bounceChance(0.2f)
+                        .penetrateChance(0.2f)
+                        .bounceChance(0.4f)
                         .setDamageType(TPDamageTypes.LIGHT_BULLET_HIT));
     }
 

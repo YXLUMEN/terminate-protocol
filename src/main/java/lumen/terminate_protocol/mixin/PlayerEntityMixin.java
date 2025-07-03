@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,7 +43,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Ent
     private float modifyDamageAmount(PlayerEntity player, DamageSource source, float amount) {
         amount = this.modifyAppliedDamage(source, amount);
 
-        if (this.shieldAmount == 0) return amount;
+        if (this.shieldAmount <= 0) return amount;
 
         float remaining = Math.max(amount * 0.9f - this.shieldAmount, 0.0f);
         this.terminate_protocol$setShieldAmount(this.shieldAmount - (amount - remaining));
@@ -52,11 +51,8 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Ent
         if (this.maxShield <= 0 || this.shieldAmount > 0) return remaining;
         this.maxShield = 0.0f;
 
-        World world = player.getWorld();
-        if (!world.isClient) {
-            world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    TPSoundEvents.SHIELD_CRASH, SoundCategory.NEUTRAL);
-        }
+        player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+                TPSoundEvents.SHIELD_CRASH, SoundCategory.NEUTRAL);
 
         return remaining;
     }
