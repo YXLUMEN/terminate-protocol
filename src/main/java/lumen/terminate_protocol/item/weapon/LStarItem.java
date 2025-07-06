@@ -28,7 +28,7 @@ public class LStarItem extends WeaponItem {
     public LStarItem(Settings settings) {
         super(settings.maxDamage(100),
                 new WeaponSettings(1, 70, null, WeaponFireMode.FULL_AUTOMATIC)
-                        .setAimOffset(new Vec3d(-0.514f, 0.15, 0))
+                        .setAimOffset(new Vec3d(-0.513f, 0.05f, 0))
                         .setAimFovMultiplier(0.7f)
                         .setRecoilDecayMultiplier(0.4f),
                 new TrajectoryRayCaster()
@@ -53,15 +53,15 @@ public class LStarItem extends WeaponItem {
     }
 
     @Override
-    public boolean onFire(World world, PlayerEntity player, ItemStack stack) {
-        if (world.isClient) return false;
+    public void onFire(World world, PlayerEntity player, ItemStack stack) {
+        if (world.isClient) return;
 
         int currentAmmo = stack.getDamage();
-        if (currentAmmo >= stack.getMaxDamage() || stack.getOrDefault(TPComponentTypes.WPN_COOLDOWN, 0) > 0) return false;
+        if (currentAmmo >= stack.getMaxDamage() || stack.getOrDefault(TPComponentTypes.WPN_COOLDOWN, 0) > 0) return;
 
         WeaponCooldownManager manager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
-        if (manager.isCoolingDown(this)) return false;
+        if (manager.isCoolingDown(this)) return;
 
         stack.setDamage(currentAmmo + 1);
         stack.set(TPComponentTypes.WPN_FIRING, true);
@@ -81,10 +81,9 @@ public class LStarItem extends WeaponItem {
         manager.set(this, Math.max(0, this.getSettings().getFireRate()));
 
         ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);
-        if (record == null) return true;
+        if (record == null) return;
 
         playSoundRecord(record, world, player, player.getPos());
-        return true;
     }
 
     @Override

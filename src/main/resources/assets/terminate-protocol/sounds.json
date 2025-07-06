@@ -262,28 +262,28 @@
     ]
   },
   "lstar.reload_magout": {
-    "subtitle": "sound.terminate-protocol.lstar.reload_magout",
+    "subtitle": "sound.terminate-protocol.lstar.reload",
     "sounds": [
       "terminate-protocol:lstar/reload_magout_1",
       "terminate-protocol:lstar/reload_magout_2"
     ]
   },
   "lstar.reload_magin": {
-    "subtitle": "sound.terminate-protocol.lstar.reload_magin",
+    "subtitle": "sound.terminate-protocol.lstar.reload",
     "sounds": [
       "terminate-protocol:lstar/reload_magin_1",
       "terminate-protocol:lstar/reload_magin_2"
     ]
   },
   "lstar.reload_boltback": {
-    "subtitle": "sound.terminate-protocol.lstar.reload_boltback",
+    "subtitle": "sound.terminate-protocol.lstar.reload",
     "sounds": [
       "terminate-protocol:lstar/reload_boltback_1",
       "terminate-protocol:lstar/reload_boltback_2"
     ]
   },
   "lstar.reload_boltforward": {
-    "subtitle": "sound.terminate-protocol.lstar.reload_boltforward",
+    "subtitle": "sound.terminate-protocol.lstar.reload",
     "sounds": [
       "terminate-protocol:lstar/reload_boltforward_1",
       "terminate-protocol:lstar/reload_boltforward_2"

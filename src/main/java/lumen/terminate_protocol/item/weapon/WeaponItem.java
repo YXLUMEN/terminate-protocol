@@ -15,7 +15,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
@@ -41,11 +40,11 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
     public void onStartFire(World world, PlayerEntity player, ItemStack stack) {
     }
 
-    public boolean onFire(World world, PlayerEntity player, ItemStack stack) {
-        if (world.isClient) return false;
+    public void onFire(World world, PlayerEntity player, ItemStack stack) {
+        if (world.isClient) return;
 
         int currentAmmo = stack.getDamage();
-        if (currentAmmo >= stack.getMaxDamage()) return false;
+        if (currentAmmo >= stack.getMaxDamage()) return;
 
         WeaponCooldownManager manager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
@@ -55,7 +54,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
                 manager.set(this, 0);
                 stack.set(TPComponentTypes.WPN_RELOADING, false);
             } else {
-                return false;
+                return;
             }
         }
 
@@ -69,10 +68,9 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         manager.set(this, Math.max(0, this.weaponSettings.getFireRate()));
 
         ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);
-        if (record == null) return true;
+        if (record == null) return;
 
         playSoundRecord(record, world, player, player.getPos());
-        return true;
     }
 
     public void onStopFire(World world, PlayerEntity player, ItemStack stack) {

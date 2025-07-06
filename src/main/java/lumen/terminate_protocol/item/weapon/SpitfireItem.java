@@ -3,35 +3,18 @@ package lumen.terminate_protocol.item.weapon;
 import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
-import lumen.terminate_protocol.client.render.item.SpiteFireItemRender;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.TrajectoryRayCaster;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.animatable.client.GeoRenderProvider;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
-public class SpitfireItem extends WeaponItem implements GeoItem {
-    private static final RawAnimation FIRE_ANIM = RawAnimation.begin().thenPlay("animation.spitfire.fire");
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
+public class SpitfireItem extends WeaponItem {
     public SpitfireItem(Settings settings) {
         super(settings.maxDamage(80),
                 new WeaponSettings(2, 65, TPItems.LIGHT_AMMO, WeaponFireMode.FULL_AUTOMATIC)
@@ -45,8 +28,6 @@ public class SpitfireItem extends WeaponItem implements GeoItem {
                         .penetrateChance(0.5f)
                         .bounceChance(0.2f)
                         .setDamageType(TPDamageTypes.HEAVY_BULLET_HIT));
-
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
@@ -66,15 +47,6 @@ public class SpitfireItem extends WeaponItem implements GeoItem {
             WeaponStage.MAGPAT, SoundHelper.of(TPSoundEvents.SPITFIRE_MAGPAT),
             WeaponStage.MAGOUT, SoundHelper.of(TPSoundEvents.SPITFIRE_MAGOUT)
     );
-
-    @Override
-    public boolean onFire(World world, PlayerEntity player, ItemStack stack) {
-        boolean bl = super.onFire(world, player, stack);
-        if (bl) {
-            this.triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerWorld) world), "Controller", "animation.spitfire.fire");
-        }
-        return bl;
-    }
 
     @Override
     public float getVerticalRecoil(Random random) {
@@ -102,29 +74,5 @@ public class SpitfireItem extends WeaponItem implements GeoItem {
                     .add(TPSoundEvents.SPITFIRE_FIRE_MECH, lowAmmo).build();
         }
         return sounds.get(stage);
-    }
-
-    @Override
-    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
-        consumer.accept(new GeoRenderProvider() {
-            private SpiteFireItemRender renderer;
-
-            @Override
-            public SpiteFireItemRender getGeoItemRenderer() {
-                if (this.renderer == null) this.renderer = new SpiteFireItemRender();
-                return this.renderer;
-            }
-        });
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "Controller", state -> PlayState.STOP)
-                .triggerableAnim("animation.spitfire.fire", FIRE_ANIM));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
     }
 }
