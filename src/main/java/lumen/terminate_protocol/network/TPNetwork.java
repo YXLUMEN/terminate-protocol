@@ -13,5 +13,6 @@ public class TPNetwork {
         PayloadTypeRegistry.playC2S().register(WeaponFireC2SPacket.ID, WeaponFireC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(WeaponReloadC2SPacket.ID, WeaponReloadC2SPacket.CODEC);
         PayloadTypeRegistry.playC2S().register(WeaponAimC2SPacket.ID, WeaponAimC2SPacket.CODEC);
+        PayloadTypeRegistry.playC2S().register(WeaponStartFireC2SPacket.ID, WeaponStartFireC2SPacket.CODEC);
     }
 }

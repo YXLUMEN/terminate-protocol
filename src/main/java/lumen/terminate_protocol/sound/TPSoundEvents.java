@@ -52,6 +52,15 @@ public class TPSoundEvents {
     public static final SoundEvent SPITFIRE_BOLTBACK = registerSound("spitfire.reload_boltback");
     public static final SoundEvent SPITFIRE_BOLTFORWARD = registerSound("spitfire.reload_boltforward");
 
+    public static final SoundEvent LSTAR_OVERHEAT_ALARM = registerSound("lstar.overheat_alarm");
+    public static final SoundEvent LSTAR_FIRE = registerSound("lstar.fire");
+    public static final SoundEvent LSTAR_FIRSTSHOT = registerSound("lstar.firstshot");
+    public static final SoundEvent LSTAR_COOLDOWN = registerSound("lstar.cooldown");
+    public static final SoundEvent LSTAR_MAGIN = registerSound("lstar.reload_magin");
+    public static final SoundEvent LSTAR_MAGOUT = registerSound("lstar.reload_magout");
+    public static final SoundEvent LSTAR_BOLTBACK = registerSound("lstar.reload_boltback");
+    public static final SoundEvent LSTAR_BOLTFORWARD = registerSound("lstar.reload_boltforward");
+
     private static SoundEvent registerSound(String id) {
         Identifier identifier = Identifier.of(TerminateProtocol.MOD_ID, id);
         return Registry.register(Registries.SOUND_EVENT, identifier, SoundEvent.of(identifier));

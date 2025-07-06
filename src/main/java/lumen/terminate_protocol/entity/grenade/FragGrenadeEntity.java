@@ -18,7 +18,7 @@ import static lumen.terminate_protocol.util.weapon.WeaponHelper.getRandomDirecti
 public class FragGrenadeEntity extends AbstractGrenadeEntity {
     private static final float POWER = 3.0f;
     private static final short FRAG_COUNT = 32;
-    private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster().maxHit((short) 3).baseDamage(6.0f);
+    private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster().baseDamage(6.0f);
 
     public FragGrenadeEntity(EntityType<? extends AbstractGrenadeEntity> entityType, World world) {
         super(entityType, world);

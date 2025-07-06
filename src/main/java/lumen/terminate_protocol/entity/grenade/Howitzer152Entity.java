@@ -18,7 +18,7 @@ public class Howitzer152Entity extends AbstractGrenadeEntity {
     private static final float POWER = 64;
     private static final short FRAG_COUNT = 256;
     private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster()
-            .maxHit((short) 2).baseDamage(160.0f).penetrateChance(3.0f);
+            .maxHit(2).baseDamage(160.0f).penetrateChance(3.0f);
 
     public Howitzer152Entity(EntityType<? extends AbstractGrenadeEntity> entityType, World world) {
         super(entityType, world);

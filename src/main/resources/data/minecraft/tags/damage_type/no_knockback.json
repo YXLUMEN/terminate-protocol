@@ -1,9 +1,11 @@
 {
   "replace": false,
   "values": [
+    "terminate-protocol:flash",
     "terminate-protocol:fragment_hit",
     "terminate-protocol:heavy_bullet",
     "terminate-protocol:light_bullet",
+    "terminate-protocol:energy_bullet",
     "terminate-protocol:sniper_bullet"
   ]
 }

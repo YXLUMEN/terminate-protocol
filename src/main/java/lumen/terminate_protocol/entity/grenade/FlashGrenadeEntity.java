@@ -1,5 +1,6 @@
 package lumen.terminate_protocol.entity.grenade;
 
+import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.effect.TPEffects;
 import lumen.terminate_protocol.entity.TPEntities;
 import lumen.terminate_protocol.item.TPItems;
@@ -9,7 +10,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -75,13 +75,13 @@ public class FlashGrenadeEntity extends AbstractGrenadeEntity {
             final float impact = calculateFlashStrength(world, this.getPos(), entity);
             if (impact <= 0.1f) continue;
 
-            if (this.getOwner() instanceof PlayerEntity owner) {
-                entity.damage(world.getDamageSources().playerAttack(owner), 0.1f);
-            }
-            if (entity instanceof PlayerEntity player) {
-                applyPlayerFlash((ServerPlayerEntity) player, impact);
+            entity.damage(world.getDamageSources().create(TPDamageTypes.FLASH, this.getOwner()), 0.1f);
+
+            if (entity instanceof ServerPlayerEntity player) {
+                applyPlayerFlash(player, impact);
                 continue;
             }
+
             entity.addStatusEffect(new StatusEffectInstance(
                     TPEffects.FLASHED, 200, 0, true, true
             ));

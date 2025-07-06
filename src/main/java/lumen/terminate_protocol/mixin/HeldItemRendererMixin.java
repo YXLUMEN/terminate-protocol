@@ -27,7 +27,7 @@ public abstract class HeldItemRendererMixin {
 
         boolean aiming = ClientWeaponActionHandler.getWasAiming();
 
-        if (!aiming && (item.getOrDefault(TPComponentTypes.WPN_RELOADING_TYPE, false) || player.isSprinting())) {
+        if (!aiming && (item.getOrDefault(TPComponentTypes.WPN_RELOADING, false) || player.isSprinting())) {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-10));
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(60));
             return;

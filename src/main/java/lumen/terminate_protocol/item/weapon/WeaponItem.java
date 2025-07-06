@@ -38,24 +38,24 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         this.caster = caster;
     }
 
-    public WeaponSettings getSettings() {
-        return this.weaponSettings;
+    public void onStartFire(World world, PlayerEntity player, ItemStack stack) {
     }
 
-    public void onFire(World world, ServerPlayerEntity player, ItemStack stack) {
-        int currentAmmo = stack.getDamage();
+    public boolean onFire(World world, PlayerEntity player, ItemStack stack) {
+        if (world.isClient) return false;
 
-        if (world.isClient || currentAmmo >= stack.getMaxDamage()) return;
+        int currentAmmo = stack.getDamage();
+        if (currentAmmo >= stack.getMaxDamage()) return false;
 
         WeaponCooldownManager manager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
         if (manager.isCoolingDown(this)) {
             // interrupt reloading
-            if (stack.getOrDefault(TPComponentTypes.WPN_RELOADING_TYPE, false)) {
+            if (stack.getOrDefault(TPComponentTypes.WPN_RELOADING, false)) {
                 manager.set(this, 0);
-                stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
+                stack.set(TPComponentTypes.WPN_RELOADING, false);
             } else {
-                return;
+                return false;
             }
         }
 
@@ -69,9 +69,13 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         manager.set(this, Math.max(0, this.weaponSettings.getFireRate()));
 
         ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);
-        if (record == null) return;
+        if (record == null) return true;
 
         playSoundRecord(record, world, player, player.getPos());
+        return true;
+    }
+
+    public void onStopFire(World world, PlayerEntity player, ItemStack stack) {
     }
 
     public void onReload(World world, PlayerEntity player, ItemStack stack) {
@@ -81,14 +85,14 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         if (manager.isCoolingDown(this)) return;
 
         manager.set(this, this.weaponSettings.getReloadTick());
-        stack.set(TPComponentTypes.WPN_RELOADING_TYPE, true);
+        stack.set(TPComponentTypes.WPN_RELOADING, true);
     }
 
-    private void restoreAmmo(ItemStack stack, PlayerEntity player) {
-        stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
+    protected void restoreAmmo(ItemStack stack, PlayerEntity player) {
+        stack.set(TPComponentTypes.WPN_RELOADING, false);
         ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager().set(this, 0);
 
-        if (player.isCreative() || findItemSlot(player, TPItems.DEBUG_AMMO) != -1) {
+        if (findItemSlot(player, TPItems.DEBUG_AMMO) != -1) {
             stack.setDamage(0);
             return;
         }
@@ -108,7 +112,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (world.isClient || !entity.isPlayer()) return;
 
-        if (stack.getOrDefault(TPComponentTypes.WPN_RELOADING_TYPE, false)) {
+        if (stack.getOrDefault(TPComponentTypes.WPN_RELOADING, false)) {
             this.reloadAction(world, (PlayerEntity) entity, stack, selected);
         }
     }
@@ -118,7 +122,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
 
         if (!selected) {
             manager.set(this, 0);
-            stack.set(TPComponentTypes.WPN_RELOADING_TYPE, false);
+            stack.set(TPComponentTypes.WPN_RELOADING, false);
             return;
         }
 
@@ -139,7 +143,7 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
         playSoundRecord(record, world, null, player.getPos());
     }
 
-    private static void playSoundRecord(ISoundRecord record, World world, @Nullable PlayerEntity player, Vec3d pos) {
+    protected static void playSoundRecord(ISoundRecord record, World world, @Nullable PlayerEntity player, Vec3d pos) {
         switch (record) {
             case SoundHelper.SingleSound(SoundEvent sound, float volume, float pitch) ->
                     world.playSound(player, pos.x, pos.y, pos.z, sound, SoundCategory.PLAYERS, volume, pitch);
@@ -172,5 +176,13 @@ public abstract class WeaponItem extends Item implements IWeaponSettings {
     @Override
     public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
+    }
+
+    public WeaponSettings getSettings() {
+        return this.weaponSettings;
+    }
+
+    public ICast getCaster() {
+        return this.caster;
     }
 }

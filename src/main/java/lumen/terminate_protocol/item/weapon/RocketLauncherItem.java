@@ -28,11 +28,7 @@ public class RocketLauncherItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
-        return TypedActionResult.consume(itemStack);
-    }
 
-    @Override
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (!world.isClient) {
             LivingEntity target = getAimTarget(user);
 
@@ -41,9 +37,10 @@ public class RocketLauncherItem extends Item {
             missile.setPitch(user.getPitch());
             missile.setVelocity(user, user.getPitch(), user.getYaw(), 0, 3.0f, 1.0f);
             world.spawnEntity(missile);
+            user.getItemCooldownManager().set(this, MAX_USE_TIME);
         }
 
-        return stack;
+        return TypedActionResult.consume(itemStack);
     }
 
     @Nullable
@@ -65,11 +62,6 @@ public class RocketLauncherItem extends Item {
 
         if (entityHit.getEntity() instanceof LivingEntity living) return living;
         return null;
-    }
-
-    @Override
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
-        return MAX_USE_TIME;
     }
 
     @Override

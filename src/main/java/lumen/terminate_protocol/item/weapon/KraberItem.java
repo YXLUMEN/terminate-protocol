@@ -1,8 +1,8 @@
 package lumen.terminate_protocol.item.weapon;
 
+import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
-import lumen.terminate_protocol.api.TPDamageTypes;
 import lumen.terminate_protocol.item.TPItems;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.ISoundRecord;

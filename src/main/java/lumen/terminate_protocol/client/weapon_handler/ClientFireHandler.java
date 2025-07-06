@@ -1,11 +1,13 @@
 package lumen.terminate_protocol.client.weapon_handler;
 
+import lumen.terminate_protocol.TPComponentTypes;
 import lumen.terminate_protocol.api.WeaponAccessor;
 import lumen.terminate_protocol.api.WeaponFireMode;
 import lumen.terminate_protocol.api.WeaponStage;
 import lumen.terminate_protocol.item.weapon.IPullbolt;
 import lumen.terminate_protocol.item.weapon.WeaponItem;
 import lumen.terminate_protocol.network.packet.WeaponFireC2SPacket;
+import lumen.terminate_protocol.network.packet.WeaponStartFireC2SPacket;
 import lumen.terminate_protocol.util.ISoundRecord;
 import lumen.terminate_protocol.util.SoundHelper;
 import lumen.terminate_protocol.util.weapon.WeaponCooldownManager;
@@ -33,9 +35,13 @@ public class ClientFireHandler {
 
     public static void doStartFire() {
         startFire = true;
+
+        ClientPlayNetworking.send(new WeaponStartFireC2SPacket(true));
     }
 
     public static void doFireTick(ClientPlayerEntity player, ItemStack stack, WeaponItem item) {
+        if (stack.getOrDefault(TPComponentTypes.WPN_COOLDOWN, 0) > 0) return;
+
         WeaponFireMode fireMode = item.getSettings().getFireMode();
         WeaponCooldownManager fireRateManager = ((WeaponAccessor) player).terminate_protocol$getWpnCooldownManager();
 
@@ -44,11 +50,9 @@ public class ClientFireHandler {
             return;
         }
 
-        if (stack.getDamage() >= stack.getMaxDamage()) return;
-        if (getIsPullbolt()) return;
+        if (stack.getDamage() >= stack.getMaxDamage() || getIsPullbolt()) return;
 
         fireRateManager.set(item, item.getSettings().getFireRate());
-
         ClientPlayNetworking.send(new WeaponFireC2SPacket());
 
         Vec3d lookVec = getPlayerLookVec(player);
@@ -88,6 +92,8 @@ public class ClientFireHandler {
 
         verticalOffset = 0;
         horizontalOffset = 0;
+
+        ClientPlayNetworking.send(new WeaponStartFireC2SPacket(false));
     }
 
     private static void spawnMuzzleFlash(ClientPlayerEntity player, Vec3d muzzlePos, Vec3d direction) {

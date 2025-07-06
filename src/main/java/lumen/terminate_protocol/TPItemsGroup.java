@@ -20,6 +20,7 @@ public class TPItemsGroup {
                         .entries((displayContext, entries) -> {
                             entries.add(R99);
                             entries.add(SPITFIRE);
+                            entries.add(LSTAR);
                             entries.add(KRABER);
                             entries.add(ROCKET_LAUNCHER);
 

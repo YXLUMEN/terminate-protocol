@@ -5,6 +5,7 @@ public enum WeaponStage {
     FIRE,
     FIRE_MECH,
     FIRE_LOW_AMMO,
+    FIRSTSHOT,
     BOLTBACK,
     BOLTFORWARD,
     MAGIN,

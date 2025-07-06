@@ -12,12 +12,12 @@ import static lumen.terminate_protocol.util.weapon.WeaponHelper.findItemSlot;
 
 public class ClientReloadHandler {
     public static void startReload(ClientPlayerEntity player, ItemStack itemStack) {
-        if (itemStack.getDamage() == 0 || itemStack.getOrDefault(TPComponentTypes.WPN_RELOADING_TYPE, false)) {
+        if (itemStack.getDamage() == 0 || itemStack.getOrDefault(TPComponentTypes.WPN_RELOADING, false)) {
             return;
         }
 
         WeaponItem item = ((WeaponItem) itemStack.getItem());
-        if (findItemSlot(player, item.getSettings().getAmmoType()) == -1 && findItemSlot(player, TPItems.DEBUG_AMMO) == -1 && !player.isCreative()) {
+        if (findItemSlot(player, item.getSettings().getAmmoType()) == -1 && findItemSlot(player, TPItems.DEBUG_AMMO) == -1) {
             return;
         }
 

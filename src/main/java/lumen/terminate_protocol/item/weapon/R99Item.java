@@ -65,7 +65,7 @@ public class R99Item extends WeaponItem {
         if (stage == null) return null;
         if (stage == WeaponStage.FIRE) {
             float lowAmmo = (float) stack.getDamage() / stack.getMaxDamage();
-            if (lowAmmo >= 0.65f) return SoundHelper.builder()
+            if (lowAmmo >= 0.7f) return SoundHelper.builder()
                     .add(TPSoundEvents.R99_FIRE_LOW_AMMO, lowAmmo)
                     .add(TPSoundEvents.R99_FIRE, 0.4f).build();
         }

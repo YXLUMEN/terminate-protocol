@@ -23,7 +23,7 @@ import static lumen.terminate_protocol.util.weapon.WeaponHelper.getRandomDirecti
 public class HomingMissileEntity extends ThrownEntity {
     private static final TrackedData<Integer> FUSE = DataTracker.registerData(HomingMissileEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final ConeTargetFinder TARGET_FINDER = new ConeTargetFinder(15, 60.0f);
-    private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster().maxHit((short) 3).baseDamage(8.0f);
+    private static final TrajectoryRayCaster RAY_CASTER = new TrajectoryRayCaster().baseDamage(8.0f);
     private static final float BASE_VELOCITY = 3.0f;
     private static final float POWER = 4.0f;
     private static final short FRAG_COUNT = 32;

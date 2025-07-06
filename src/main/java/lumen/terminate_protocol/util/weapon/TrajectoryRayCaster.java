@@ -31,13 +31,13 @@ import static lumen.terminate_protocol.util.weapon.WeaponHelper.syncTrack;
 
 
 public class TrajectoryRayCaster implements ICast {
-    private static final float ENTITY_DETECT_RADIUS = 0.3f;
     private RegistryKey<DamageType> damageType = TPDamageTypes.FRAGMENT_HIT;
     private boolean showTrack = false;
     private boolean important = false;
 
     private float damage = 0.0f;
-    private short maxHit = 2;
+    private int maxHit = 3;
+    private float entityDetectRadius = 0.3f;
     private float hardThreshold = 1.0f;
     private float bounceChance = 1.0f;
     private int baseRayLength = 32;
@@ -69,7 +69,7 @@ public class TrajectoryRayCaster implements ICast {
     }
 
     public TrajectoryRayCaster baseRayLength(int baseRayLength) {
-        this.baseRayLength = baseRayLength;
+        this.baseRayLength = Math.max(baseRayLength, 0);
         return this;
     }
 
@@ -78,8 +78,8 @@ public class TrajectoryRayCaster implements ICast {
         return this;
     }
 
-    public TrajectoryRayCaster maxHit(short maxHit) {
-        this.maxHit = maxHit;
+    public TrajectoryRayCaster maxHit(int maxHit) {
+        this.maxHit = Math.max(maxHit, 0);
         return this;
     }
 
@@ -89,7 +89,12 @@ public class TrajectoryRayCaster implements ICast {
     }
 
     public TrajectoryRayCaster bounceChance(float bounceChance) {
-        this.bounceChance = bounceChance;
+        this.bounceChance = MathHelper.clamp(bounceChance, 0.0f, 1.0f);
+        return this;
+    }
+
+    public TrajectoryRayCaster entityDetectRadius(float f) {
+        this.entityDetectRadius = f;
         return this;
     }
 
@@ -147,7 +152,7 @@ public class TrajectoryRayCaster implements ICast {
 
             EntityHitResult entityHit = ProjectileUtil.raycast(
                     attacker, currentPos, endPos,
-                    new Box(currentPos, endPos).expand(ENTITY_DETECT_RADIUS),
+                    new Box(currentPos, endPos).expand(entityDetectRadius),
                     e -> !e.isSpectator() && e.isAlive() && e.canHit(),
                     currentPos.squaredDistanceTo(endPos)
             );
@@ -198,7 +203,6 @@ public class TrajectoryRayCaster implements ICast {
                 // 穿透
                 currentPos = blockHit.getPos().add(currentDir);
                 remainingDamage *= Math.max(0.3f, 1 - (hardness * 0.2f));
-                if (entityHit != null) handleDamage(world, attacker, entityHit, remainingDamage);
 
                 if (world instanceof ServerWorld serverWorld) {
                     serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState),
@@ -221,7 +225,7 @@ public class TrajectoryRayCaster implements ICast {
 
         float bounceProbability = MathHelper.clamp(
                 (0.5f * hardnessFactor + 0.4f * angleFactor + 0.1f * damageFactor) * randomVariation * bounceChance,
-                0.1f, 0.8f);
+                0.0f, 1.0f);
 
         return random.nextFloat() < bounceProbability;
     }

@@ -67,6 +67,7 @@ public class ClientWeaponActionHandler {
             }
             wasFiring = isFiring;
         }
+
         if (isFiring) {
             player.setSprinting(false);
             doFireTick(player, stack, item);

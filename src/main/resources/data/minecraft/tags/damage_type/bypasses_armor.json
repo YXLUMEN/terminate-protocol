@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "terminate-protocol:sniper_bullet"
+    "terminate-protocol:sniper_bullet",
+    "terminate-protocol:flash"
   ]
 }

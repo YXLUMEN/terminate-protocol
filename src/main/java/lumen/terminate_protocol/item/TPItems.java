@@ -2,10 +2,7 @@ package lumen.terminate_protocol.item;
 
 import lumen.terminate_protocol.TerminateProtocol;
 import lumen.terminate_protocol.item.grenade.*;
-import lumen.terminate_protocol.item.weapon.KraberItem;
-import lumen.terminate_protocol.item.weapon.R99Item;
-import lumen.terminate_protocol.item.weapon.RocketLauncherItem;
-import lumen.terminate_protocol.item.weapon.SpitfireItem;
+import lumen.terminate_protocol.item.weapon.*;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -35,6 +32,7 @@ public class TPItems {
     public static final Item KRABER = register("kraber", new KraberItem(new Item.Settings()));
     public static final Item R99 = register("r99", new R99Item(new Item.Settings()));
     public static final Item SPITFIRE = register("spitfire", new SpitfireItem(new Item.Settings()));
+    public static final Item LSTAR = register("lstar", new LStarItem(new Item.Settings()));
 
     public static final Item ROCKET_LAUNCHER = register("rocket_launcher", new RocketLauncherItem(new Item.Settings()));
 
