@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
@@ -50,30 +49,6 @@ public class WeaponHelper {
         Vec3d velocity = end.subtract(start).normalize().multiply(60);
         world.addParticle(ParticleTypes.END_ROD, start.x, start.y, start.z, velocity.x, velocity.y, velocity.z);
     }
-    /*
-    public static void debugDrawRay(World world, Vec3d start, Vec3d end, SimpleParticleType particleType, int amplifier) {
-        if (world.isClient) return;
-
-        Vec3d direction = end.subtract(start);
-        double length = direction.length();
-        direction = direction.normalize();
-
-        int particleCount = (int) (length * amplifier);
-        if (particleCount <= 0) return;
-
-        double step = length / particleCount;
-
-        for (int i = 0; i <= particleCount; i++) {
-            Vec3d pos = start.add(direction.multiply(i * step));
-            ((ServerWorld) world).spawnParticles(
-                    particleType,
-                    pos.x, pos.y, pos.z,
-                    1,
-                    0, 0, 0,
-                    0
-            );
-        }
-    }*/
 
     public static Vec3d getRandomDirection(Random random) {
         double y = 1 - (random.nextDouble() * 2);

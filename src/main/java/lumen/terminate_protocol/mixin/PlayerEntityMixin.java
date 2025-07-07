@@ -5,6 +5,9 @@ import lumen.terminate_protocol.api.WeaponAccessor;
 import lumen.terminate_protocol.sound.TPSoundEvents;
 import lumen.terminate_protocol.util.weapon.WeaponCooldownManager;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
@@ -22,9 +25,10 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Ent
     @Unique
     private float maxShield = 0.0f;
     @Unique
-    private float shieldAmount = 0.0f;
-    @Unique
     private boolean isAimingWithWpn = false;
+
+    @Unique
+    private static final TrackedData<Float> SHIELD_AMOUNT = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
     // 枪械开火速率控制
     @Unique
@@ -43,12 +47,12 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Ent
     private float modifyDamageAmount(PlayerEntity player, DamageSource source, float amount) {
         amount = this.modifyAppliedDamage(source, amount);
 
-        if (this.shieldAmount <= 0) return amount;
+        if (this.terminate_protocol$getShieldAmount() <= 0) return amount;
 
-        float remaining = Math.max(amount * 0.9f - this.shieldAmount, 0.0f);
-        this.terminate_protocol$setShieldAmount(this.shieldAmount - (amount - remaining));
+        float remaining = Math.max(amount * 0.9f - this.terminate_protocol$getShieldAmount(), 0.0f);
+        this.terminate_protocol$setShieldAmount(this.terminate_protocol$getShieldAmount() - (amount - remaining));
 
-        if (this.maxShield <= 0 || this.shieldAmount > 0) return remaining;
+        if (this.maxShield <= 0 || this.terminate_protocol$getShieldAmount() > 0) return remaining;
         this.maxShield = 0.0f;
 
         player.getWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -57,32 +61,21 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Ent
         return remaining;
     }
 
+    @Inject(method = "initDataTracker", at = @At("TAIL"))
+    private void injectDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(SHIELD_AMOUNT, 0.0f);
+    }
+
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeShield(@NotNull NbtCompound nbt, CallbackInfo ci) {
         nbt.putFloat("TMaxShield", this.maxShield);
-        nbt.putFloat("TShieldAmount", this.shieldAmount);
+        nbt.putFloat("TShieldAmount", this.terminate_protocol$getShieldAmount());
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void readShield(@NotNull NbtCompound nbt, CallbackInfo ci) {
         this.terminate_protocol$setMaxShieldAmount(nbt.getFloat("TMaxShield"));
         this.terminate_protocol$setShieldAmount(nbt.getFloat("TShieldAmount"));
-    }
-
-    public float terminate_protocol$getShieldAmount() {
-        return this.shieldAmount;
-    }
-
-    public void terminate_protocol$setShieldAmount(float amount) {
-        this.shieldAmount = MathHelper.clamp(amount, 0.0f, this.maxShield);
-    }
-
-    public float terminate_protocol$getMaxShieldAmount() {
-        return this.maxShield;
-    }
-
-    public void terminate_protocol$setMaxShieldAmount(float amount) {
-        this.maxShield = Math.max(amount, 0.0f);
     }
 
     // 枪械开火速率
@@ -93,6 +86,24 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Ent
 
     public WeaponCooldownManager terminate_protocol$getWpnCooldownManager() {
         return this.weaponCooldownManager;
+    }
+
+    public float terminate_protocol$getShieldAmount() {
+        var player = (PlayerEntity) (Object) this;
+        return player.getDataTracker().get(SHIELD_AMOUNT);
+    }
+
+    public void terminate_protocol$setShieldAmount(float amount) {
+        var player = (PlayerEntity) (Object) this;
+        player.getDataTracker().set(SHIELD_AMOUNT, MathHelper.clamp(amount, 0.0f, this.maxShield));
+    }
+
+    public float terminate_protocol$getMaxShieldAmount() {
+        return this.maxShield;
+    }
+
+    public void terminate_protocol$setMaxShieldAmount(float amount) {
+        this.maxShield = Math.max(amount, 0.0f);
     }
 
     public void terminate_protocol$setWpnAiming(boolean aiming) {

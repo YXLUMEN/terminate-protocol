@@ -47,8 +47,10 @@ public class LStarItem extends WeaponItem {
 
     @Override
     public void onStartFire(World world, PlayerEntity player, ItemStack stack) {
-        if (stack.getDamage() >= stack.getMaxDamage() || stack.getOrDefault(TPComponentTypes.WPN_COOLDOWN, 0) > 0)
+        if (stack.getDamage() >= stack.getMaxDamage() || stack.getOrDefault(TPComponentTypes.WPN_COOLDOWN, 0) > 0) {
             return;
+        }
+
         stack.set(TPComponentTypes.WPN_FIRING, true);
     }
 
@@ -66,19 +68,19 @@ public class LStarItem extends WeaponItem {
         stack.setDamage(currentAmmo + 1);
         stack.set(TPComponentTypes.WPN_FIRING, true);
 
-        if (stack.getDamage() >= stack.getMaxDamage()) {
-            this.onStopFire(world, player, stack);
-
-            stack.set(TPComponentTypes.WPN_OVERHEAT, true);
-            world.playSound(null, player.getBlockPos(), TPSoundEvents.LSTAR_OVERHEAT_ALARM, SoundCategory.PLAYERS);
-        }
-
         boolean isAiming = ((WeaponAccessor) player).terminate_protocol$getWpnAiming();
         Vec3d lookVec = getPlayerLookVec(player);
         Vec3d muzzlePos = isAiming ? player.getEyePos() : getMuzzleOffset(player, lookVec);
 
         this.getCaster().start(world, player, muzzlePos, lookVec);
         manager.set(this, Math.max(0, this.getSettings().getFireRate()));
+
+        if (stack.getDamage() >= stack.getMaxDamage()) {
+            this.onStopFire(world, player, stack);
+
+            stack.set(TPComponentTypes.WPN_OVERHEAT, true);
+            world.playSound(null, player.getBlockPos(), TPSoundEvents.LSTAR_OVERHEAT_ALARM, SoundCategory.PLAYERS);
+        }
 
         ISoundRecord record = this.getStageSound(WeaponStage.FIRE, stack);
         if (record == null) return;
@@ -103,7 +105,7 @@ public class LStarItem extends WeaponItem {
         if (!world.isClient && entity.isPlayer()) {
             // 停止射击开始冷却
             // 过热失效
-            if (stack.getOrDefault(TPComponentTypes.WPN_FIRING, false) || stack.getOrDefault(TPComponentTypes.WPN_OVERHEAT, true)) {
+            if (stack.getOrDefault(TPComponentTypes.WPN_FIRING, false) || stack.getOrDefault(TPComponentTypes.WPN_OVERHEAT, false)) {
                 return;
             }
 
