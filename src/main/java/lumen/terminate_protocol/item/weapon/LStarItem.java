@@ -31,14 +31,16 @@ public class LStarItem extends WeaponItem {
                         .setAimOffset(new Vec3d(-0.513f, 0.05f, 0))
                         .setAimFovMultiplier(0.7f)
                         .setRecoilDecayMultiplier(0.4f),
-                new TrajectoryRayCaster()
+                new TrajectoryRayCaster.Builder()
                         .showTrack(true)
                         .baseDamage(3.5f)
                         .baseRayLength(100)
                         .penetrateChance(0)
                         .bounceChance(0)
                         .entityDetectRadius(1.5f)
-                        .setDamageType(TPDamageTypes.ENERGY_BULLET_HIT));
+                        .setDamageType(TPDamageTypes.ENERGY_BULLET_HIT)
+                        .build()
+        );
 
         settings.component(TPComponentTypes.WPN_FIRING, false);
         settings.component(TPComponentTypes.WPN_OVERHEAT, false);

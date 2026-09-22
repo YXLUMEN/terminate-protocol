@@ -21,7 +21,7 @@ public class KraberItem extends WeaponItem implements IPullbolt {
                         .setAimFovMultiplier(0.1f)
                         .setRecoilDecayMultiplier(0.95f)
                         .setAimOffset(new Vec3d(-0.5112f, 0.0073f, -0.2f)),
-                new TrajectoryRayCaster()
+                new TrajectoryRayCaster.Builder()
                         .showTrack(true)
                         .isImportant(true)
                         .baseDamage(40)
@@ -29,7 +29,9 @@ public class KraberItem extends WeaponItem implements IPullbolt {
                         .bounceChance(0.2f)
                         .healthBaseDamage(0.3f)
                         .seriousInjury(true)
-                        .setDamageType(TPDamageTypes.SNIPER_BULLET_HIT));
+                        .setDamageType(TPDamageTypes.SNIPER_BULLET_HIT)
+                        .build()
+        );
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
