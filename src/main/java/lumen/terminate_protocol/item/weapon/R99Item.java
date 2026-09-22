@@ -21,13 +21,14 @@ public class R99Item extends WeaponItem {
                         .setAimOffset(new Vec3d(-0.514f, 0.15, 0))
                         .setAimFovMultiplier(0.8f)
                         .setRecoilDecayMultiplier(0.3f),
-                new TrajectoryRayCaster()
+                new TrajectoryRayCaster.Builder()
                         .showTrack(true)
                         .baseDamage(3)
                         .baseRayLength(50)
                         .penetrateChance(0.2f)
                         .bounceChance(0.4f)
-                        .setDamageType(TPDamageTypes.LIGHT_BULLET_HIT));
+                        .setDamageType(TPDamageTypes.LIGHT_BULLET_HIT).build()
+        );
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(

@@ -21,13 +21,15 @@ public class SpitfireItem extends WeaponItem {
                         .setAimOffset(new Vec3d(-0.513f, 0.05f, 0))
                         .setAimFovMultiplier(0.7f)
                         .setRecoilDecayMultiplier(0.4f),
-                new TrajectoryRayCaster()
+                new TrajectoryRayCaster.Builder()
                         .showTrack(true)
                         .baseDamage(5)
                         .baseRayLength(100)
                         .penetrateChance(0.5f)
                         .bounceChance(0.2f)
-                        .setDamageType(TPDamageTypes.HEAVY_BULLET_HIT));
+                        .setDamageType(TPDamageTypes.HEAVY_BULLET_HIT)
+                        .build()
+        );
     }
 
     private static final Map<Integer, WeaponStage> reloadStages = Map.of(
